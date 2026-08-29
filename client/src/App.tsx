@@ -1,11 +1,15 @@
-import { useEffect } from "react";
+import { lazy, useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AppLayout } from "./layouts/AppLayout.tsx";
-import { ApplicationDetails } from "./pages/applicationDetails";
-import { Applications } from "./pages/applications";
-import { Login } from "./pages/login";
-import { Signup } from "./pages/signup";
 import { useAuthStore } from "./store/useAuthStore.ts";
+
+const ApplicationDetails = lazy(
+  () => import("./pages/applicationDetails/index.tsx"),
+);
+const Applications = lazy(() => import("./pages/applications/index.tsx"));
+const Login = lazy(() => import("./pages/login/index.tsx"));
+const Signup = lazy(() => import("./pages/signup/index.tsx"));
+const Dashboard = lazy(() => import("./pages/dashboard/index.tsx"));
 
 function App() {
   const hydrate = useAuthStore((state) => state.hydrate);
@@ -23,6 +27,7 @@ function App() {
           <Route path="/" element={<Navigate to="/applications" replace />} />
           <Route path="/applications" element={<Applications />} />
           <Route path="/applications/:id" element={<ApplicationDetails />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Route>
         <Route path="*" element={<Navigate to="/applications" replace />} />
       </Routes>

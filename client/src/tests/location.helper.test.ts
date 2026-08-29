@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { fetchLocation, searchLocations } from "./location.helper.ts";
+import { fetchLocation, searchLocations } from "@utils/location.helper";
 
 describe("searchLocations", () => {
   it("returns special work-mode options without calling GeoNames", async () => {
@@ -27,9 +27,12 @@ describe("searchLocations", () => {
 
 describe("fetchLocation", () => {
   it("falls back to a label when search has no results", async () => {
-    vi.stubGlobal("fetch", vi.fn(async () => ({
-      json: async () => ({ geonames: [] }),
-    })));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({
+        json: async () => ({ geonames: [] }),
+      })),
+    );
 
     await expect(fetchLocation("Unknownville")).resolves.toMatchObject({
       name: "Unknownville",

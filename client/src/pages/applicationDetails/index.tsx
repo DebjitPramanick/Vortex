@@ -52,10 +52,16 @@ function titleCase(value: string): string {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
-export function ApplicationDetails() {
+function ApplicationDetails() {
   const { id } = useParams<{ id: string }>();
-  const { selected, statusHistory, loading, error, fetchById, fetchStatusHistory } =
-    useApplicationStore();
+  const {
+    selected,
+    statusHistory,
+    loading,
+    error,
+    fetchById,
+    fetchStatusHistory,
+  } = useApplicationStore();
   const [editOpen, setEditOpen] = useState(false);
 
   useEffect(() => {
@@ -145,9 +151,7 @@ export function ApplicationDetails() {
               />
               <Detail
                 label="Job type"
-                value={
-                  selected.job_type ? titleCase(selected.job_type) : "—"
-                }
+                value={selected.job_type ? titleCase(selected.job_type) : "—"}
               />
               <Detail
                 label="Source"
@@ -227,3 +231,5 @@ export function ApplicationDetails() {
     </div>
   );
 }
+
+export default ApplicationDetails;

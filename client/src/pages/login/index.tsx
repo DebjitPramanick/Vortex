@@ -4,9 +4,9 @@ import { Card } from "@components/atoms/card";
 import { AuthForm, AuthScreen } from "@components/molecules/auth-form";
 import { useAuthStore } from "@store/useAuthStore";
 
-export function Signup() {
+function Login() {
   const navigate = useNavigate();
-  const { user, ready, error, signUp } = useAuthStore();
+  const { user, ready, error, signIn } = useAuthStore();
   const [submitting, setSubmitting] = useState(false);
 
   if (ready && user) {
@@ -17,21 +17,21 @@ export function Signup() {
     <AuthScreen>
       <Card>
         <AuthForm
-          mode="signup"
-          title="Create account"
-          description="Start tracking your job search in Vortex."
-          submitLabel="Create account"
+          mode="login"
+          title="Welcome back"
+          description="Sign in to your Vortex workspace."
+          submitLabel="Sign in"
           error={error}
           loading={submitting}
           footer={
             <>
-              Already have an account? <Link to="/login">Sign in</Link>
+              New here? <Link to="/signup">Create an account</Link>
             </>
           }
           onSubmit={async ({ email, password }) => {
             setSubmitting(true);
             try {
-              await signUp(email, password);
+              await signIn(email, password);
               navigate("/applications", { replace: true });
             } finally {
               setSubmitting(false);
@@ -42,3 +42,5 @@ export function Signup() {
     </AuthScreen>
   );
 }
+
+export default Login;

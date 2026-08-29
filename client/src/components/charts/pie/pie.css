@@ -1,0 +1,106 @@
+.vx-pie {
+  display: grid;
+  gap: 1rem;
+  align-items: center;
+}
+
+@media (min-width: 640px) {
+  .vx-pie {
+    grid-template-columns: minmax(12rem, 1fr) minmax(11rem, 16rem);
+  }
+}
+
+.vx-pie-plot {
+  min-width: 0;
+}
+
+.vx-pie-plot .recharts-wrapper,
+.vx-pie-plot .recharts-responsive-container {
+  width: 100% !important;
+}
+
+.vx-pie-empty {
+  margin: 0;
+  padding: 2rem 0.5rem;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--color-vortex-muted);
+}
+
+.vx-pie-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  max-height: 18rem;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.vx-pie-legend-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.5rem;
+  align-items: center;
+  width: 100%;
+  padding: 0.375rem 0.5rem;
+  border: 0;
+  border-radius: var(--radius-vortex-sm);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.vx-pie-legend-item:hover,
+.vx-pie-legend-item[data-active="true"] {
+  background: var(--color-vortex-bg);
+}
+
+.vx-pie-swatch {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.vx-pie-legend-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  color: var(--color-vortex-fg);
+}
+
+.vx-pie-legend-meta {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--color-vortex-muted);
+  white-space: nowrap;
+}
+
+.vx-pie-tooltip {
+  min-width: 9rem;
+  padding: 0.5rem 0.625rem;
+  background: var(--color-vortex-surface);
+  border: 1px solid var(--color-vortex-border);
+  border-radius: var(--radius-vortex-sm);
+  box-shadow: var(--shadow-vortex-sm);
+}
+
+.vx-pie-tooltip-name {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-vortex-fg);
+}
+
+.vx-pie-tooltip-value {
+  margin: 0.125rem 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--color-vortex-secondary);
+}

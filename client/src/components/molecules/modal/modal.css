@@ -14,7 +14,7 @@
   flex-direction: column;
   width: 100%;
   max-height: min(36rem, calc(100svh - 2rem));
-  overflow: auto;
+  overflow: hidden;
   background: var(--color-vortex-surface);
   border: 1px solid var(--color-vortex-border);
   border-radius: var(--radius-vortex);
@@ -38,7 +38,9 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 0.75rem;
+  flex-shrink: 0;
   padding: 1rem 1rem 0.75rem;
+  border-bottom: 1px solid var(--color-vortex-border);
 }
 
 .vx-modal-title {
@@ -56,8 +58,10 @@
 }
 
 .vx-modal-body {
-  padding: 0 1rem 1rem;
-  overflow: visible;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 1rem;
+  overflow-y: auto;
   font-size: 0.875rem;
   color: var(--color-vortex-secondary);
 }
@@ -67,8 +71,10 @@
   align-items: center;
   justify-content: flex-end;
   gap: 0.5rem;
+  flex-shrink: 0;
   padding: 0.75rem 1rem 1rem;
   border-top: 1px solid var(--color-vortex-border);
+  background: var(--color-vortex-surface);
 }
 
 .vx-modal-close {

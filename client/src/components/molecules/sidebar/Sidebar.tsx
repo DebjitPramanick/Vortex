@@ -13,7 +13,9 @@ export function Sidebar({ email, onSignOut }: SidebarProps) {
       <NavLink to="/applications" className="vx-sidebar-brand">
         <span className="vx-sidebar-mark">Vx</span>
         <span>
-          <span className="block text-[13px] font-semibold tracking-tight">Vortex</span>
+          <span className="block text-[13px] font-semibold tracking-tight">
+            Vortex
+          </span>
           <span className="vx-meta leading-none">Job command center</span>
         </span>
       </NavLink>
@@ -21,6 +23,9 @@ export function Sidebar({ email, onSignOut }: SidebarProps) {
       <nav className="vx-sidebar-nav" aria-label="Primary">
         <NavLink to="/applications" className="vx-nav-item vx-sidebar-link">
           Applications
+        </NavLink>
+        <NavLink to="/dashboard" className="vx-nav-item vx-sidebar-link">
+          Dashboard
         </NavLink>
       </nav>
 

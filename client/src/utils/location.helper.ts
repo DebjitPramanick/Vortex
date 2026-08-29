@@ -8,6 +8,8 @@ type GeoName = {
   lng?: string | number;
 };
 
+const GEONAMES_USERNAME = import.meta.env.VITE_GEONAMES_USERNAME;
+
 export function formatLocation(
   location: Location | string | null | undefined,
 ): string {
@@ -47,7 +49,7 @@ export async function searchLocations(query: string): Promise<Location[]> {
 
   try {
     const response = await fetch(
-      `https://secure.geonames.org/searchJSON?q=${encodeURIComponent(trimmed)}&maxRows=8&username=debjitpramanick1`,
+      `https://secure.geonames.org/searchJSON?q=${encodeURIComponent(trimmed)}&maxRows=8&username=${GEONAMES_USERNAME}`,
     );
     const data = (await response.json()) as { geonames?: GeoName[] };
     const matches = (data.geonames ?? [])

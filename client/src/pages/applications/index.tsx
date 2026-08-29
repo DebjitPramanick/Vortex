@@ -5,7 +5,7 @@ import { useApplicationStore } from "@store/useApplicationStore";
 import { ApplicationTable } from "./ApplicationTable";
 import { NewApplicationPopup } from "./NewApplicationPopup";
 
-export function Applications() {
+function Applications() {
   const navigate = useNavigate();
   const { applications, loading, error, fetchAll } = useApplicationStore();
   const [createOpen, setCreateOpen] = useState(false);
@@ -34,9 +34,7 @@ export function Applications() {
         </Button>
       </div>
 
-      {error ? (
-        <p className="text-[13px] text-vortex-error">{error}</p>
-      ) : null}
+      {error ? <p className="text-[13px] text-vortex-error">{error}</p> : null}
 
       <ApplicationTable
         applications={applications}
@@ -52,3 +50,5 @@ export function Applications() {
     </div>
   );
 }
+
+export default Applications;
