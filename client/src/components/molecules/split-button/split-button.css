@@ -1,0 +1,118 @@
+.vx-split-btn {
+  display: inline-flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  height: 2.5rem;
+  border: 1px solid var(--color-vortex-primary-hover);
+  border-radius: var(--radius-vortex-sm);
+  background: var(--color-vortex-primary);
+  color: #fff;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgb(79 70 229 / 0.28);
+}
+
+.vx-split-btn.is-disabled {
+  opacity: 0.55;
+  box-shadow: none;
+}
+
+.vx-split-btn-main,
+.vx-split-btn-trigger {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+
+.vx-split-btn-main:disabled,
+.vx-split-btn-trigger:disabled {
+  cursor: not-allowed;
+}
+
+.vx-split-btn-main {
+  padding: 0 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.vx-split-btn-divider {
+  width: 1px;
+  margin: 0.45rem 0;
+  background: rgb(255 255 255 / 0.28);
+}
+
+.vx-split-btn-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  flex-shrink: 0;
+}
+
+.vx-split-btn-trigger svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 150ms ease;
+}
+
+.vx-split-btn-trigger[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+.vx-split-btn:not(.is-disabled) .vx-split-btn-main:hover,
+.vx-split-btn:not(.is-disabled) .vx-split-btn-trigger:hover {
+  background: rgb(0 0 0 / 0.14);
+}
+
+.vx-split-btn-menu {
+  position: fixed;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  padding: 0.375rem;
+  background: var(--color-vortex-surface);
+  border: 1px solid var(--color-vortex-border);
+  border-radius: var(--radius-vortex);
+  box-shadow: var(--shadow-vortex-sm), 0 8px 24px rgb(15 23 42 / 0.08);
+}
+
+.vx-split-btn-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.5rem 0.625rem;
+  border: 0;
+  border-radius: var(--radius-vortex-sm);
+  background: transparent;
+  color: var(--color-vortex-fg);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
+
+.vx-split-btn-item:hover,
+.vx-split-btn-item:focus-visible {
+  background: var(--color-vortex-bg);
+  outline: none;
+}
+
+.vx-split-btn-item.is-selected {
+  color: var(--color-vortex-primary);
+  background: var(--color-vortex-primary-soft);
+}
+
+.vx-split-btn-check {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.vx-split-btn-check svg {
+  width: 14px;
+  height: 14px;
+}

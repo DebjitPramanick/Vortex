@@ -1,7 +1,6 @@
 import type { ApplicationStatus } from "@app-types/application";
 import { APPLICATION_STATUSES } from "@utils/fetchJobDetailsFromUrl.helper";
-import ChevronDownIcon from "@icons/chevron-down.svg";
-import "./statusSelect.css";
+import { SplitButton } from "@components/molecules/split-button";
 
 const STATUS_LABEL: Record<ApplicationStatus, string> = {
   saved: "Saved",
@@ -13,6 +12,11 @@ const STATUS_LABEL: Record<ApplicationStatus, string> = {
   withdrawn: "Withdrawn",
 };
 
+const STATUS_ITEMS = APPLICATION_STATUSES.map((status) => ({
+  id: status,
+  label: STATUS_LABEL[status],
+}));
+
 export type StatusSelectProps = {
   value: ApplicationStatus;
   disabled?: boolean;
@@ -21,26 +25,13 @@ export type StatusSelectProps = {
 
 export function StatusSelect({ value, disabled, onChange }: StatusSelectProps) {
   return (
-    <label className="vx-status-select-wrap" htmlFor="status-select">
-      <span className="sr-only">Application status</span>
-      <select
-        className="vx-status-select"
-        id="status-select"
-        value={value}
-        disabled={disabled}
-        onChange={(event) => {
-          const next = event.target.value as ApplicationStatus;
-          if (next === value) return;
-          onChange(next);
-        }}
-      >
-        {APPLICATION_STATUSES.map((status) => (
-          <option key={status} value={status}>
-            {STATUS_LABEL[status]}
-          </option>
-        ))}
-      </select>
-      <ChevronDownIcon aria-hidden="true" />
-    </label>
+    <SplitButton
+      label={STATUS_LABEL[value]}
+      items={STATUS_ITEMS}
+      selectedId={value}
+      disabled={disabled}
+      ariaLabel="Application status"
+      onSelect={(id) => onChange(id as ApplicationStatus)}
+    />
   );
 }
