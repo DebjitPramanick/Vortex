@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import { Avatar } from "../../atoms/avatar";
 import { Button } from "../../atoms/button";
 import ApplicationsIcon from "@icons/applications.svg";
+import ProfilesIcon from "@icons/profiles.svg";
 import StatIcon from "@icons/stat.svg";
 import LogoutIcon from "@icons/logout.svg";
 import "./sidebar.css";
@@ -28,6 +29,10 @@ export function Sidebar({ email, onSignOut }: SidebarProps) {
         <NavLink to="/applications" className="vx-nav-item vx-sidebar-link">
           <ApplicationsIcon aria-hidden="true" />
           Applications
+        </NavLink>
+        <NavLink to="/profiles" className="vx-nav-item vx-sidebar-link">
+          <ProfilesIcon aria-hidden="true" />
+          Profiles
         </NavLink>
         <NavLink to="/dashboard" className="vx-nav-item vx-sidebar-link">
           <StatIcon aria-hidden="true" />

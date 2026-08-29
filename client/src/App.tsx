@@ -10,6 +10,7 @@ const Applications = lazy(() => import("./pages/applications/index.tsx"));
 const Login = lazy(() => import("./pages/login/index.tsx"));
 const Signup = lazy(() => import("./pages/signup/index.tsx"));
 const Dashboard = lazy(() => import("./pages/dashboard/index.tsx"));
+const Profiles = lazy(() => import("./pages/profiles/index.tsx"));
 
 function App() {
   const hydrate = useAuthStore((state) => state.hydrate);
@@ -28,6 +29,7 @@ function App() {
           <Route path="/applications" element={<Applications />} />
           <Route path="/applications/:id" element={<ApplicationDetails />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profiles" element={<Profiles />} />
         </Route>
         <Route path="*" element={<Navigate to="/applications" replace />} />
       </Routes>

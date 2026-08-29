@@ -40,7 +40,7 @@ export function StatusSelect({ value, disabled, onChange }: StatusSelectProps) {
           </option>
         ))}
       </select>
-      <ChevronDownIcon className="vx-status-select-caret" aria-hidden="true" />
+      <ChevronDownIcon aria-hidden="true" />
     </label>
   );
 }
