@@ -1,5 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { Button } from "../../atoms/button";
+import ApplicationsIcon from "@icons/applications.svg";
+import StatIcon from "@icons/stat.svg";
 import "./sidebar.css";
 
 export type SidebarProps = {
@@ -22,9 +24,11 @@ export function Sidebar({ email, onSignOut }: SidebarProps) {
 
       <nav className="vx-sidebar-nav" aria-label="Primary">
         <NavLink to="/applications" className="vx-nav-item vx-sidebar-link">
+          <ApplicationsIcon aria-hidden="true" />
           Applications
         </NavLink>
         <NavLink to="/dashboard" className="vx-nav-item vx-sidebar-link">
+          <StatIcon aria-hidden="true" />
           Dashboard
         </NavLink>
       </nav>
