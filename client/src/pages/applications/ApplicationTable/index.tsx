@@ -1,8 +1,8 @@
 import { format, parseISO } from "date-fns";
-import { Chip } from "../../components/molecules/chip";
-import type { ChipVariant } from "../../components/molecules/chip";
-import type { JobApplication, Salary } from "../../types/application.ts";
-import "./applicationTable.css";
+import { Chip } from "@components/molecules/chip";
+import type { ChipVariant } from "@components/molecules/chip";
+import type { JobApplication, Salary } from "../../../types/application.ts";
+import "./index.css";
 
 export type ApplicationTableProps = {
   applications: JobApplication[];
@@ -54,7 +54,6 @@ export function ApplicationTable({
       <table className="vx-app-table">
         <thead>
           <tr>
-            <th>ID</th>
             <th>Company</th>
             <th>Role</th>
             <th>Status</th>
@@ -76,7 +75,6 @@ export function ApplicationTable({
               }}
               tabIndex={0}
             >
-              <td className="vx-meta text-vortex-secondary">{row.id.slice(0, 8)}</td>
               <td className="font-medium">{row.company}</td>
               <td className="text-vortex-secondary">{row.role}</td>
               <td>

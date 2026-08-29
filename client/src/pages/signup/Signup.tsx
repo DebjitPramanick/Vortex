@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import { Card } from "../../components/atoms/card";
-import { AuthForm, AuthScreen } from "../../components/molecules/auth-form";
-import { useAuthStore } from "../../store/useAuthStore.ts";
+import { Card } from "@components/atoms/card";
+import { AuthForm, AuthScreen } from "@components/molecules/auth-form";
+import { useAuthStore } from "@store/useAuthStore";
 
 export function Signup() {
   const navigate = useNavigate();

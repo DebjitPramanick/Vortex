@@ -37,6 +37,7 @@ export type JobApplication = {
   source: Source | null;
   location: string;
   job_url: string;
+  job_description: string | null;
   notes: string | null;
   applied_at: string;
   created_at: string;
@@ -51,6 +52,7 @@ export type NewApplication = {
   source?: Source | null;
   location: string;
   job_url: string;
+  job_description?: string | null;
   notes?: string | null;
   applied_at: string;
 };

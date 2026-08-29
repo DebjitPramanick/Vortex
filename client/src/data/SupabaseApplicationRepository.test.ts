@@ -112,6 +112,7 @@ function createApplicationsBuilder(
         source: payload.source ?? null,
         location: payload.location ?? "",
         job_url: payload.job_url ?? "",
+        job_description: payload.job_description ?? null,
         notes: payload.notes ?? null,
         applied_at: payload.applied_at ?? now,
         created_at: now,

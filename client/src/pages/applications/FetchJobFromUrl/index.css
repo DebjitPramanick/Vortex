@@ -1,0 +1,30 @@
+.vx-fetch-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.vx-fetch-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.vx-fetch-row .vx-input {
+  flex: 1;
+}
+
+.vx-fetch-error {
+  margin: 0;
+  padding: 0.625rem 0.75rem;
+  border-radius: var(--radius-vortex-sm);
+  background: var(--color-vortex-error-soft);
+  color: var(--color-vortex-error);
+  font-size: 0.8125rem;
+}
+
+.vx-fetch-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-vortex-fg);
+}

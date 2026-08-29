@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { Sidebar } from "../components/molecules/sidebar";
-import { useAuthStore } from "../store/useAuthStore.ts";
+import { Sidebar } from "@components/molecules/sidebar";
+import { useAuthStore } from "@store/useAuthStore";
 
 export function AppLayout() {
   const { user, ready, hydrate, signOut } = useAuthStore();

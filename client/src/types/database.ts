@@ -22,6 +22,7 @@ export type Database = {
           source: Source | null;
           location: string;
           job_url: string;
+          job_description: string | null;
           notes: string | null;
           applied_at: string;
           created_at: string;
@@ -37,6 +38,7 @@ export type Database = {
           source?: Source | null;
           location: string;
           job_url: string;
+          job_description?: string | null;
           notes?: string | null;
           applied_at: string;
           created_at?: string;
@@ -50,6 +52,7 @@ export type Database = {
           source?: Source | null;
           location?: string;
           job_url?: string;
+          job_description?: string | null;
           notes?: string | null;
           applied_at?: string;
           updated_at?: string;

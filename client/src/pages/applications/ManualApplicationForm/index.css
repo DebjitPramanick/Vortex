@@ -1,0 +1,43 @@
+.vx-app-form {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .vx-app-form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .vx-app-form-span {
+    grid-column: 1 / -1;
+  }
+}
+
+.vx-app-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.vx-app-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-vortex-fg);
+}
+
+.vx-app-error {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--color-vortex-error);
+}
+
+.vx-app-banner {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 0.625rem 0.75rem;
+  border-radius: var(--radius-vortex-sm);
+  background: var(--color-vortex-error-soft);
+  color: var(--color-vortex-error);
+  font-size: 0.8125rem;
+}

@@ -1,18 +1,18 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  CardTitle,
-} from "../../components/atoms/card";
-import { useApplicationStore } from "../../store/useApplicationStore.ts";
-import { ApplicationTable } from "./ApplicationTable.tsx";
+import { Button } from "@components/atoms/button";
+import { Card, CardBody, CardHeader, CardTitle } from "@components/atoms/card";
+import { useApplicationStore } from "@store/useApplicationStore";
+import { ApplicationTable } from "./ApplicationTable";
+import { NewApplicationPopup } from "./NewApplicationPopup";
 
 export function Applications() {
   const navigate = useNavigate();
   const { applications, loading, error, fetchAll } = useApplicationStore();
   const [query, setQuery] = useState("");
+  const [createOpen, setCreateOpen] = useState(false);
+
+  const closeCreate = useCallback(() => setCreateOpen(false), []);
 
   useEffect(() => {
     void fetchAll().catch(() => undefined);
@@ -22,7 +22,9 @@ export function Applications() {
     const q = query.trim().toLowerCase();
     if (!q) return applications;
     return applications.filter((row) =>
-      `${row.company} ${row.role} ${row.location} ${row.id}`.toLowerCase().includes(q),
+      `${row.company} ${row.role} ${row.location} ${row.id}`
+        .toLowerCase()
+        .includes(q),
     );
   }, [applications, query]);
 
@@ -35,16 +37,24 @@ export function Applications() {
             Track every role from saved to offer.
           </p>
         </div>
-        <label className="w-full max-w-72">
-          <span className="sr-only">Search applications</span>
-          <input
-            className="vx-input"
-            placeholder="Search company, role, or ID"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-          />
-        </label>
+        <Button
+          type="button"
+          variant="primary"
+          onClick={() => setCreateOpen(true)}
+        >
+          New application
+        </Button>
       </div>
+
+      <label className="block max-w-80">
+        <span className="sr-only">Search applications</span>
+        <input
+          className="vx-input"
+          placeholder="Search company, role, or ID"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+        />
+      </label>
 
       <Card size="sm">
         <CardHeader className="mb-0 border-b border-vortex-border px-4 py-3">
@@ -64,6 +74,12 @@ export function Applications() {
           )}
         </CardBody>
       </Card>
+
+      <NewApplicationPopup
+        open={createOpen}
+        onClose={closeCreate}
+        onCreated={(created) => navigate(`/applications/${created.id}`)}
+      />
     </div>
   );
 }

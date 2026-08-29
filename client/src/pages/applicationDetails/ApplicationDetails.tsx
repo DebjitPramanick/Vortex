@@ -7,11 +7,11 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../../components/atoms/card";
-import { Chip } from "../../components/molecules/chip";
-import type { ChipVariant } from "../../components/molecules/chip";
-import { useApplicationStore } from "../../store/useApplicationStore.ts";
-import type { JobApplication, Salary } from "../../types/application.ts";
+} from "@components/atoms/card";
+import { Chip } from "@components/molecules/chip";
+import type { ChipVariant } from "@components/molecules/chip";
+import { useApplicationStore } from "@store/useApplicationStore";
+import type { JobApplication, Salary } from "@app-types/application";
 
 const STATUS_LABEL: Record<JobApplication["status"], string> = {
   saved: "Saved",
@@ -61,11 +61,17 @@ export function ApplicationDetails() {
   }, [id, fetchById, fetchStatusHistory]);
 
   if (!id) {
-    return <p className="text-[13px] text-vortex-secondary">Missing application id.</p>;
+    return (
+      <p className="text-[13px] text-vortex-secondary">
+        Missing application id.
+      </p>
+    );
   }
 
   if (loading && !selected) {
-    return <p className="text-[13px] text-vortex-secondary">Loading application…</p>;
+    return (
+      <p className="text-[13px] text-vortex-secondary">Loading application…</p>
+    );
   }
 
   if (error && !selected) {
@@ -75,8 +81,13 @@ export function ApplicationDetails() {
   if (!selected) {
     return (
       <div>
-        <p className="text-[13px] text-vortex-secondary">Application not found.</p>
-        <Link to="/applications" className="mt-3 inline-block text-[13px] text-vortex-primary">
+        <p className="text-[13px] text-vortex-secondary">
+          Application not found.
+        </p>
+        <Link
+          to="/applications"
+          className="mt-3 inline-block text-[13px] text-vortex-primary"
+        >
           Back to applications
         </Link>
       </div>
@@ -95,7 +106,9 @@ export function ApplicationDetails() {
         <div className="mt-3 flex flex-wrap items-start justify-between gap-3">
           <div>
             <h1 className="vx-page-title">{selected.company}</h1>
-            <p className="mt-1 text-[13px] text-vortex-secondary">{selected.role}</p>
+            <p className="mt-1 text-[13px] text-vortex-secondary">
+              {selected.role}
+            </p>
           </div>
           <Chip variant={selected.status as ChipVariant}>
             {STATUS_LABEL[selected.status]}
@@ -116,8 +129,16 @@ export function ApplicationDetails() {
               <Detail label="Application ID" value={selected.id} mono />
               <Detail label="Location" value={selected.location} />
               <Detail label="Source" value={selected.source ?? "—"} />
-              <Detail label="Salary" value={formatSalary(selected.salary)} mono />
-              <Detail label="Applied" value={formatDate(selected.applied_at)} mono />
+              <Detail
+                label="Salary"
+                value={formatSalary(selected.salary)}
+                mono
+              />
+              <Detail
+                label="Applied"
+                value={formatDate(selected.applied_at)}
+                mono
+              />
               <Detail
                 label="Job URL"
                 value={
@@ -153,7 +174,9 @@ export function ApplicationDetails() {
           </CardHeader>
           <CardBody>
             {statusHistory.length === 0 ? (
-              <p className="text-[13px] text-vortex-secondary">No status changes yet.</p>
+              <p className="text-[13px] text-vortex-secondary">
+                No status changes yet.
+              </p>
             ) : (
               <ol className="space-y-3">
                 {statusHistory.map((entry) => (
@@ -161,7 +184,9 @@ export function ApplicationDetails() {
                     <p className="font-medium text-vortex-fg">
                       {entry.from_status ?? "—"} → {entry.to_status}
                     </p>
-                    <p className="vx-meta mt-0.5">{formatDate(entry.changed_at)}</p>
+                    <p className="vx-meta mt-0.5">
+                      {formatDate(entry.changed_at)}
+                    </p>
                   </li>
                 ))}
               </ol>
@@ -185,7 +210,9 @@ function Detail({
   return (
     <div>
       <dt className="text-[12px] text-vortex-muted">{label}</dt>
-      <dd className={`mt-1 text-[13px] ${mono ? "vx-meta text-vortex-fg" : "text-vortex-fg"}`}>
+      <dd
+        className={`mt-1 text-[13px] ${mono ? "vx-meta text-vortex-fg" : "text-vortex-fg"}`}
+      >
         {value}
       </dd>
     </div>
