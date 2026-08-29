@@ -20,7 +20,9 @@
       "@components/*": ["./src/components/*"],
       "@pages/*": ["./src/pages/*"],
       "@store/*": ["./src/store/*"],
-      "@app-types/*": ["./src/types/*"]
+      "@app-types/*": ["./src/types/*"],
+      "@icons": ["./src/icons/index.tsx"],
+      "@icons/*": ["./src/icons/*"]
     },
 
     /* Linting */

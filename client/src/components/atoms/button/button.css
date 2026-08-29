@@ -23,22 +23,36 @@
   opacity: 0.5;
 }
 
+.vx-btn svg {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+}
+
 .vx-btn-sm {
-  height: 1.75rem;
+  --vx-btn-size: 1.75rem;
+  height: var(--vx-btn-size);
   padding: 0 0.625rem;
   font-size: 0.75rem;
 }
 
 .vx-btn-md {
-  height: 2.25rem;
+  --vx-btn-size: 2.25rem;
+  height: var(--vx-btn-size);
   padding: 0 0.875rem;
   font-size: 0.8125rem;
 }
 
 .vx-btn-lg {
-  height: 2.5rem;
+  --vx-btn-size: 2.5rem;
+  height: var(--vx-btn-size);
   padding: 0 1rem;
   font-size: 0.875rem;
+}
+
+.vx-btn-icon {
+  width: var(--vx-btn-size);
+  padding: 0;
 }
 
 .vx-btn-primary {

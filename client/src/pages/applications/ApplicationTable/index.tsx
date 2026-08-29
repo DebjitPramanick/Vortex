@@ -1,13 +1,16 @@
 import { format, parseISO } from "date-fns";
 import { Chip } from "@components/molecules/chip";
 import type { ChipVariant } from "@components/molecules/chip";
+import { Table, type TableColumn } from "@components/molecules/table";
 import type { JobApplication, Salary } from "../../../types/application.ts";
-import "./index.css";
 
 export type ApplicationTableProps = {
   applications: JobApplication[];
+  loading?: boolean;
   onRowClick?: (application: JobApplication) => void;
 };
+
+const PAGE_SIZE = 10;
 
 const STATUS_LABEL: Record<JobApplication["status"], string> = {
   saved: "Saved",
@@ -39,56 +42,79 @@ function formatDate(value: string): string {
   }
 }
 
+const COLUMNS: TableColumn<JobApplication>[] = [
+  {
+    id: "company",
+    header: "Company",
+    filterable: false,
+    sortable: false,
+    render: (row) => <span className="font-medium">{row.company}</span>,
+  },
+  {
+    id: "role",
+    header: "Role",
+    filterable: false,
+    sortable: false,
+    render: (row) => <span className="text-vortex-secondary">{row.role}</span>,
+  },
+  {
+    id: "status",
+    header: "Status",
+    sortable: false,
+    getFilterValue: (row) => STATUS_LABEL[row.status],
+    render: (row) => (
+      <Chip variant={row.status as ChipVariant}>
+        {STATUS_LABEL[row.status]}
+      </Chip>
+    ),
+  },
+  {
+    id: "location",
+    header: "Location",
+    getSortValue: (row) => row.location,
+    getFilterValue: (row) => row.location,
+    render: (row) => (
+      <span className="text-vortex-secondary">{row.location}</span>
+    ),
+  },
+  {
+    id: "salary",
+    header: "Salary",
+    getSortValue: (row) => row.salary?.amount ?? null,
+    getFilterValue: (row) => formatSalary(row.salary),
+    render: (row) => (
+      <span className="vx-meta">{formatSalary(row.salary)}</span>
+    ),
+  },
+  {
+    id: "applied",
+    header: "Applied",
+    getSortValue: (row) => Date.parse(row.applied_at) || row.applied_at,
+    getFilterValue: (row) => formatDate(row.applied_at),
+    render: (row) => (
+      <span className="vx-meta">{formatDate(row.applied_at)}</span>
+    ),
+  },
+];
+
 export function ApplicationTable({
   applications,
+  loading,
   onRowClick,
 }: ApplicationTableProps) {
-  if (applications.length === 0) {
-    return (
-      <p className="vx-app-table-empty">No applications match this view.</p>
-    );
-  }
-
   return (
-    <div className="vx-app-table-wrap">
-      <table className="vx-app-table">
-        <thead>
-          <tr>
-            <th>Company</th>
-            <th>Role</th>
-            <th>Status</th>
-            <th>Location</th>
-            <th>Salary</th>
-            <th>Applied</th>
-          </tr>
-        </thead>
-        <tbody>
-          {applications.map((row) => (
-            <tr
-              key={row.id}
-              onClick={() => onRowClick?.(row)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  onRowClick?.(row);
-                }
-              }}
-              tabIndex={0}
-            >
-              <td className="font-medium">{row.company}</td>
-              <td className="text-vortex-secondary">{row.role}</td>
-              <td>
-                <Chip variant={row.status as ChipVariant}>
-                  {STATUS_LABEL[row.status]}
-                </Chip>
-              </td>
-              <td className="text-vortex-secondary">{row.location}</td>
-              <td className="vx-meta">{formatSalary(row.salary)}</td>
-              <td className="vx-meta">{formatDate(row.applied_at)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <Table
+      rows={applications}
+      columns={COLUMNS}
+      getRowId={(row) => row.id}
+      searchPlaceholder="Search company, role, or ID"
+      getSearchValue={(row) =>
+        `${row.company} ${row.role} ${row.location} ${row.id}`
+      }
+      pageSize={PAGE_SIZE}
+      loading={loading}
+      emptyMessage="No applications match this view."
+      onRowClick={onRowClick}
+    />
   );
 }

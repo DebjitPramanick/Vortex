@@ -1,0 +1,403 @@
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type ReactNode,
+} from "react";
+import { Button } from "@components/atoms/button";
+import ChevronUpIcon from "@icons/chevron-up.svg";
+import ChevronDownIcon from "@icons/chevron-down.svg";
+import FunnelIcon from "@icons/funnel.svg";
+import { cx } from "../../cx.ts";
+import { FilterPopup } from "./FilterPopup.tsx";
+import "./table.css";
+
+export type TableSortDirection = "asc" | "desc";
+
+type TableColumnBase<T> = {
+  id: string;
+  header: string;
+  render: (row: T) => ReactNode;
+};
+
+type TableColumnSort<T> =
+  | {
+      sortable?: true;
+      getSortValue: (row: T) => string | number | null;
+    }
+  | {
+      sortable: false;
+      getSortValue?: never;
+    };
+
+type TableColumnFilter<T> =
+  | {
+      filterable?: true;
+      getFilterValue: (row: T) => string;
+    }
+  | {
+      filterable: false;
+      getFilterValue?: never;
+    };
+
+export type TableColumn<T> = TableColumnBase<T> &
+  TableColumnSort<T> &
+  TableColumnFilter<T>;
+
+export type TableProps<T> = {
+  rows: T[];
+  columns: TableColumn<T>[];
+  getRowId: (row: T) => string;
+  searchPlaceholder?: string;
+  getSearchValue?: (row: T) => string;
+  pageSize?: number;
+  loading?: boolean;
+  emptyMessage?: string;
+  onRowClick?: (row: T) => void;
+  className?: string;
+};
+
+type SortState = {
+  columnId: string;
+  direction: TableSortDirection;
+} | null;
+
+function compareValues(
+  a: string | number | null,
+  b: string | number | null,
+  direction: TableSortDirection,
+): number {
+  const empty = direction === "asc" ? 1 : -1;
+  if (a == null && b == null) return 0;
+  if (a == null) return empty;
+  if (b == null) return -empty;
+
+  const result =
+    typeof a === "number" && typeof b === "number"
+      ? a - b
+      : String(a).localeCompare(String(b), undefined, { numeric: true });
+
+  return direction === "asc" ? result : -result;
+}
+
+function SortButton({
+  direction,
+  onCycle,
+}: {
+  direction: TableSortDirection | null;
+  onCycle: () => void;
+}) {
+  const isAsc = direction === "asc";
+  const label =
+    direction === null
+      ? "Sort ascending"
+      : isAsc
+        ? "Sort descending"
+        : "Clear sort";
+
+  return (
+    <Button
+      size="sm"
+      variant="ghost"
+      icon={isAsc ? <ChevronUpIcon /> : <ChevronDownIcon />}
+      aria-label={label}
+      className={cx(direction && "vx-table-icon-active")}
+      onClick={onCycle}
+    />
+  );
+}
+
+export function Table<T>({
+  rows,
+  columns,
+  getRowId,
+  searchPlaceholder = "Search",
+  getSearchValue,
+  pageSize = 10,
+  loading = false,
+  emptyMessage = "No rows to display.",
+  onRowClick,
+  className,
+}: TableProps<T>) {
+  const [query, setQuery] = useState("");
+  const [sort, setSort] = useState<SortState>(null);
+  const [filters, setFilters] = useState<Record<string, string[]>>({});
+  const [openFilterId, setOpenFilterId] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const filterAnchorRef = useRef<HTMLElement | null>(null);
+
+  const searched = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return rows;
+    return rows.filter((row) => {
+      const haystack = getSearchValue
+        ? getSearchValue(row)
+        : columns
+            .map((column) =>
+              column.filterable === false ? "" : column.getFilterValue(row),
+            )
+            .join(" ");
+      return haystack.toLowerCase().includes(q);
+    });
+  }, [columns, getSearchValue, query, rows]);
+
+  const filtered = useMemo(() => {
+    return searched.filter((row) =>
+      columns.every((column) => {
+        if (column.filterable === false) return true;
+        const selected = filters[column.id];
+        if (!selected?.length) return true;
+        return selected.includes(column.getFilterValue(row));
+      }),
+    );
+  }, [columns, filters, searched]);
+
+  const filterOptions = useMemo(() => {
+    const options: Record<string, string[]> = {};
+    for (const column of columns) {
+      if (column.filterable === false) continue;
+      const values = new Set<string>();
+      for (const row of rows) {
+        values.add(column.getFilterValue(row));
+      }
+      options[column.id] = [...values].sort((a, b) =>
+        a.localeCompare(b, undefined, { numeric: true }),
+      );
+    }
+    return options;
+  }, [columns, rows]);
+
+  const sorted = useMemo(() => {
+    if (!sort) return filtered;
+    const column = columns.find((item) => item.id === sort.columnId);
+    if (!column || column.sortable === false) return filtered;
+    return [...filtered].sort((a, b) =>
+      compareValues(
+        column.getSortValue(a),
+        column.getSortValue(b),
+        sort.direction,
+      ),
+    );
+  }, [columns, filtered, sort]);
+
+  const pageCount = Math.max(1, Math.ceil(sorted.length / pageSize));
+  const safePage = Math.min(page, pageCount);
+
+  useEffect(() => {
+    setPage(1);
+  }, [query, sort, filters, pageSize, rows]);
+
+  useEffect(() => {
+    if (page !== safePage) setPage(safePage);
+  }, [page, safePage]);
+
+  const pageRows = useMemo(() => {
+    const start = (safePage - 1) * pageSize;
+    return sorted.slice(start, start + pageSize);
+  }, [pageSize, safePage, sorted]);
+
+  const rangeStart = sorted.length === 0 ? 0 : (safePage - 1) * pageSize + 1;
+  const rangeEnd = Math.min(safePage * pageSize, sorted.length);
+
+  const cycleSort = (columnId: string) => {
+    setSort((current) => {
+      if (current?.columnId !== columnId) {
+        return { columnId, direction: "asc" };
+      }
+      if (current.direction === "asc") {
+        return { columnId, direction: "desc" };
+      }
+      return null;
+    });
+  };
+
+  const handleRowKeyDown = (
+    event: KeyboardEvent<HTMLTableRowElement>,
+    row: T,
+  ) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onRowClick?.(row);
+    }
+  };
+
+  const closeFilter = useCallback(() => {
+    filterAnchorRef.current = null;
+    setOpenFilterId(null);
+  }, []);
+
+  const toggleFilter = (columnId: string, anchor: HTMLElement) => {
+    if (openFilterId === columnId) {
+      filterAnchorRef.current = null;
+      setOpenFilterId(null);
+      return;
+    }
+    filterAnchorRef.current = anchor;
+    setOpenFilterId(columnId);
+  };
+
+  const toggleFilterValue = (columnId: string, value: string) => {
+    setFilters((current) => {
+      const selected = new Set(current[columnId] ?? []);
+      if (selected.has(value)) selected.delete(value);
+      else selected.add(value);
+      return { ...current, [columnId]: [...selected] };
+    });
+  };
+
+  const clearFilter = (columnId: string) => {
+    setFilters((current) => ({ ...current, [columnId]: [] }));
+  };
+
+  const openFilterColumn = columns.find((column) => column.id === openFilterId);
+
+  return (
+    <div className={cx("vx-table", className)}>
+      <div className="vx-table-toolbar">
+        <label className="vx-table-search">
+          <span className="sr-only">{searchPlaceholder}</span>
+          <input
+            className="vx-input"
+            placeholder={searchPlaceholder}
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
+        </label>
+        <div className="vx-table-toolbar-lead">
+          <span className="vx-meta">
+            {loading ? "Loading…" : `${sorted.length} rows`}
+          </span>
+        </div>
+      </div>
+
+      <div className="vx-table-scroll">
+        <table className="vx-table-grid">
+          <thead>
+            <tr>
+              {columns.map((column) => {
+                const direction =
+                  sort?.columnId === column.id ? sort.direction : null;
+                const filterOpen = openFilterId === column.id;
+                const filterActive = Boolean(filters[column.id]?.length);
+                return (
+                  <th key={column.id} scope="col">
+                    <div className="vx-table-th">
+                      <span>{column.header}</span>
+                      <span className="vx-table-th-actions">
+                        {column.sortable !== false ? (
+                          <SortButton
+                            direction={direction}
+                            onCycle={() => cycleSort(column.id)}
+                          />
+                        ) : null}
+                        {column.filterable !== false ? (
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="ghost"
+                            icon={<FunnelIcon />}
+                            className={cx(
+                              (filterOpen || filterActive) &&
+                                "vx-table-icon-active",
+                            )}
+                            aria-label={`Filter ${column.header}`}
+                            aria-expanded={filterOpen}
+                            aria-haspopup="dialog"
+                            onClick={(event) =>
+                              toggleFilter(column.id, event.currentTarget)
+                            }
+                          />
+                        ) : null}
+                      </span>
+                    </div>
+                  </th>
+                );
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {pageRows.length === 0 ? (
+              <tr className="vx-table-empty-row">
+                <td colSpan={columns.length}>
+                  {loading ? "Loading…" : emptyMessage}
+                </td>
+              </tr>
+            ) : (
+              pageRows.map((row) => (
+                <tr
+                  key={getRowId(row)}
+                  tabIndex={onRowClick ? 0 : undefined}
+                  className={
+                    onRowClick ? "vx-table-row-interactive" : undefined
+                  }
+                  onClick={() => onRowClick?.(row)}
+                  onKeyDown={(event) => handleRowKeyDown(event, row)}
+                >
+                  {columns.map((column) => (
+                    <td key={column.id}>{column.render(row)}</td>
+                  ))}
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="vx-table-pagination">
+        <p className="vx-table-page-status">
+          {sorted.length === 0
+            ? "No results"
+            : `Showing ${rangeStart}–${rangeEnd} of ${sorted.length}`}
+        </p>
+        <div className="vx-table-page-controls">
+          <Button
+            type="button"
+            size="sm"
+            variant="secondary"
+            disabled={safePage <= 1}
+            onClick={() => setPage((current) => Math.max(1, current - 1))}
+          >
+            Previous
+          </Button>
+          <span className="vx-table-page-index">
+            Page {safePage} of {pageCount}
+          </span>
+          <Button
+            type="button"
+            size="sm"
+            variant="secondary"
+            disabled={safePage >= pageCount || sorted.length === 0}
+            onClick={() => setPage((current) => current + 1)}
+          >
+            Next
+          </Button>
+        </div>
+      </div>
+
+      <FilterPopup
+        open={Boolean(openFilterColumn)}
+        columnId={openFilterColumn?.id ?? ""}
+        title={
+          openFilterColumn ? `Filter ${openFilterColumn.header}` : "Filter"
+        }
+        options={
+          openFilterColumn ? (filterOptions[openFilterColumn.id] ?? []) : []
+        }
+        selected={
+          openFilterColumn ? (filters[openFilterColumn.id] ?? []) : []
+        }
+        anchorRef={filterAnchorRef}
+        onToggle={(value) => {
+          if (openFilterColumn) toggleFilterValue(openFilterColumn.id, value);
+        }}
+        onClear={() => {
+          if (openFilterColumn) clearFilter(openFilterColumn.id);
+        }}
+        onClose={closeFilter}
+      />
+    </div>
+  );
+}

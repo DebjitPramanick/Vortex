@@ -29,7 +29,7 @@ export function AppLayout() {
   }
 
   return (
-    <div className="flex min-h-svh bg-vortex-bg">
+    <div className="flex h-svh overflow-hidden bg-vortex-bg">
       {menuOpen ? (
         <button
           type="button"
@@ -52,7 +52,7 @@ export function AppLayout() {
         />
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col">
         <header className="flex h-14 items-center border-b border-vortex-border bg-vortex-surface px-4 md:hidden">
           <button
             type="button"
@@ -62,7 +62,7 @@ export function AppLayout() {
             Menu
           </button>
         </header>
-        <main className="flex-1 px-4 py-6 md:px-8">
+        <main className="flex min-h-0 flex-1 flex-col overflow-hidden py-4 px-4">
           <Outlet />
         </main>
       </div>

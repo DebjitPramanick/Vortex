@@ -9,7 +9,8 @@ export type ButtonProps = {
   size?: ButtonSize;
   variant?: ButtonVariant;
   loading?: boolean;
-  children: ReactNode;
+  icon?: ReactNode;
+  children?: ReactNode;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 export function Button({
@@ -19,17 +20,27 @@ export function Button({
   disabled,
   className,
   type = "button",
+  icon,
   children,
   ...props
 }: ButtonProps) {
+  const iconOnly = Boolean(icon) && children == null;
+
   return (
     <button
       type={type}
-      className={cx("vx-btn", `vx-btn-${size}`, `vx-btn-${variant}`, className)}
+      className={cx(
+        "vx-btn",
+        `vx-btn-${size}`,
+        `vx-btn-${variant}`,
+        iconOnly && "vx-btn-icon",
+        className,
+      )}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
       {...props}
     >
+      {icon}
       {loading ? "Loading…" : children}
     </button>
   );

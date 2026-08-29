@@ -1,0 +1,204 @@
+.vx-table {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1;
+  background: var(--color-vortex-surface);
+  border: 1px solid var(--color-vortex-border);
+  border-radius: var(--radius-vortex);
+  overflow: hidden;
+}
+
+.vx-table-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-vortex-border);
+  flex-shrink: 0;
+}
+
+.vx-table-toolbar-lead {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.vx-table-search {
+  flex: 1 1 16rem;
+  max-width: 300px;
+  margin-right: auto;
+}
+
+.vx-table-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.vx-table-grid {
+  width: 100%;
+  min-width: 52rem;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.vx-table-grid thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--color-vortex-surface);
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--color-vortex-border);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-vortex-muted);
+  vertical-align: top;
+}
+
+.vx-table-th {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-height: 1.5rem;
+}
+
+.vx-table-th-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+  flex-shrink: 0;
+}
+
+.vx-table-th-actions .vx-btn {
+  color: var(--color-vortex-muted);
+}
+
+.vx-table-th-actions .vx-table-icon-active {
+  color: var(--color-vortex-primary);
+}
+
+.vx-table-filter-popup {
+  position: fixed;
+  z-index: 50;
+  width: 13.75rem;
+  max-height: 17.5rem;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-vortex-surface);
+  border: 1px solid var(--color-vortex-border);
+  border-radius: var(--radius-vortex);
+  box-shadow: var(--shadow-vortex-sm), 0 8px 24px rgb(15 23 42 / 0.08);
+}
+
+.vx-table-filter-popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 0.5rem 0.375rem 0.75rem;
+  border-bottom: 1px solid var(--color-vortex-border);
+}
+
+.vx-table-filter-popup-title {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-vortex-fg);
+}
+
+.vx-table-filter-popup-list {
+  overflow: auto;
+  padding: 0.375rem;
+}
+
+.vx-table-filter-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.5rem;
+  border-radius: var(--radius-vortex-sm);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--color-vortex-fg);
+  cursor: pointer;
+}
+
+.vx-table-filter-option:hover {
+  background: var(--color-vortex-bg);
+}
+
+.vx-table-filter-option input {
+  accent-color: var(--color-vortex-primary);
+  margin: 0;
+}
+
+.vx-table-filter-empty {
+  margin: 0;
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--color-vortex-secondary);
+}
+
+.vx-table-grid td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-vortex-border);
+  font-size: 0.8125rem;
+  vertical-align: middle;
+}
+
+.vx-table-row-interactive {
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.vx-table-row-interactive:hover {
+  background: var(--color-vortex-bg);
+}
+
+.vx-table-grid tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.vx-table-empty-row td {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: var(--color-vortex-secondary);
+  font-size: 0.8125rem;
+}
+
+.vx-table-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--color-vortex-border);
+  background: var(--color-vortex-surface);
+  flex-shrink: 0;
+}
+
+.vx-table-page-status {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--color-vortex-secondary);
+}
+
+.vx-table-page-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.vx-table-page-index {
+  font-size: 0.75rem;
+  color: var(--color-vortex-muted);
+  min-width: 6.5rem;
+  text-align: center;
+}
