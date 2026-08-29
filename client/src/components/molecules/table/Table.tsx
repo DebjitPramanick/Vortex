@@ -1,6 +1,5 @@
 import {
   useCallback,
-  useEffect,
   useMemo,
   useRef,
   useState,
@@ -13,9 +12,14 @@ import ChevronDownIcon from "@icons/chevron-down.svg";
 import FunnelIcon from "@icons/funnel.svg";
 import { cx } from "../../cx.ts";
 import { FilterPopup } from "./FilterPopup.tsx";
+import {
+  DEFAULT_TABLE_VIEW,
+  type TableSortDirection,
+  type TableViewState,
+} from "./tableViewState.ts";
 import "./table.css";
 
-export type TableSortDirection = "asc" | "desc";
+export type { TableSortDirection, TableViewState } from "./tableViewState.ts";
 
 type TableColumnBase<T> = {
   id: string;
@@ -58,12 +62,11 @@ export type TableProps<T> = {
   emptyMessage?: string;
   onRowClick?: (row: T) => void;
   className?: string;
+  view?: TableViewState;
+  onViewChange?: (view: TableViewState) => void;
 };
 
-type SortState = {
-  columnId: string;
-  direction: TableSortDirection;
-} | null;
+type SortState = TableViewState["sort"];
 
 function compareValues(
   a: string | number | null,
@@ -121,13 +124,20 @@ export function Table<T>({
   emptyMessage = "No rows to display.",
   onRowClick,
   className,
+  view: viewProp,
+  onViewChange,
 }: TableProps<T>) {
-  const [query, setQuery] = useState("");
-  const [sort, setSort] = useState<SortState>(null);
-  const [filters, setFilters] = useState<Record<string, string[]>>({});
-  const [openFilterId, setOpenFilterId] = useState<string | null>(null);
-  const [page, setPage] = useState(1);
+  const [internalView, setInternalView] = useState(DEFAULT_TABLE_VIEW);
+  const view = viewProp ?? internalView;
+  const { query, sort, filters, page } = view;
+
+  const updateView = (next: TableViewState) => {
+    if (viewProp && onViewChange) onViewChange(next);
+    else setInternalView(next);
+  };
+
   const filterAnchorRef = useRef<HTMLElement | null>(null);
+  const [openFilterId, setOpenFilterId] = useState<string | null>(null);
 
   const searched = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -184,15 +194,10 @@ export function Table<T>({
   }, [columns, filtered, sort]);
 
   const pageCount = Math.max(1, Math.ceil(sorted.length / pageSize));
-  const safePage = Math.min(page, pageCount);
-
-  useEffect(() => {
-    setPage(1);
-  }, [query, sort, filters, pageSize, rows]);
-
-  useEffect(() => {
-    if (page !== safePage) setPage(safePage);
-  }, [page, safePage]);
+  const safePage =
+    loading && rows.length === 0
+      ? Math.max(1, page)
+      : Math.min(Math.max(1, page), pageCount);
 
   const pageRows = useMemo(() => {
     const start = (safePage - 1) * pageSize;
@@ -203,15 +208,13 @@ export function Table<T>({
   const rangeEnd = Math.min(safePage * pageSize, sorted.length);
 
   const cycleSort = (columnId: string) => {
-    setSort((current) => {
-      if (current?.columnId !== columnId) {
-        return { columnId, direction: "asc" };
-      }
-      if (current.direction === "asc") {
-        return { columnId, direction: "desc" };
-      }
-      return null;
-    });
+    const nextSort: SortState =
+      sort?.columnId !== columnId
+        ? { columnId, direction: "asc" }
+        : sort.direction === "asc"
+          ? { columnId, direction: "desc" }
+          : null;
+    updateView({ ...view, sort: nextSort, page: 1 });
   };
 
   const handleRowKeyDown = (
@@ -240,16 +243,22 @@ export function Table<T>({
   };
 
   const toggleFilterValue = (columnId: string, value: string) => {
-    setFilters((current) => {
-      const selected = new Set(current[columnId] ?? []);
-      if (selected.has(value)) selected.delete(value);
-      else selected.add(value);
-      return { ...current, [columnId]: [...selected] };
+    const selected = new Set(filters[columnId] ?? []);
+    if (selected.has(value)) selected.delete(value);
+    else selected.add(value);
+    updateView({
+      ...view,
+      filters: { ...filters, [columnId]: [...selected] },
+      page: 1,
     });
   };
 
   const clearFilter = (columnId: string) => {
-    setFilters((current) => ({ ...current, [columnId]: [] }));
+    updateView({
+      ...view,
+      filters: { ...filters, [columnId]: [] },
+      page: 1,
+    });
   };
 
   const openFilterColumn = columns.find((column) => column.id === openFilterId);
@@ -263,7 +272,9 @@ export function Table<T>({
             className="vx-input"
             placeholder={searchPlaceholder}
             value={query}
-            onChange={(event) => setQuery(event.target.value)}
+            onChange={(event) =>
+              updateView({ ...view, query: event.target.value, page: 1 })
+            }
           />
         </label>
         <div className="vx-table-toolbar-lead">
@@ -358,7 +369,9 @@ export function Table<T>({
             size="sm"
             variant="secondary"
             disabled={safePage <= 1}
-            onClick={() => setPage((current) => Math.max(1, current - 1))}
+            onClick={() =>
+              updateView({ ...view, page: Math.max(1, safePage - 1) })
+            }
           >
             Previous
           </Button>
@@ -370,7 +383,7 @@ export function Table<T>({
             size="sm"
             variant="secondary"
             disabled={safePage >= pageCount || sorted.length === 0}
-            onClick={() => setPage((current) => current + 1)}
+            onClick={() => updateView({ ...view, page: safePage + 1 })}
           >
             Next
           </Button>

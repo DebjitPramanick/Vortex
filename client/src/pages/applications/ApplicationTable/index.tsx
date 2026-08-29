@@ -1,7 +1,7 @@
 import { format, parseISO } from "date-fns";
 import { Chip } from "@components/molecules/chip";
 import type { ChipVariant } from "@components/molecules/chip";
-import { Table, type TableColumn } from "@components/molecules/table";
+import { Table, type TableColumn, type TableViewState } from "@components/molecules/table";
 import type {
   JobApplication,
   JobType,
@@ -13,6 +13,8 @@ export type ApplicationTableProps = {
   applications: JobApplication[];
   loading?: boolean;
   onRowClick?: (application: JobApplication) => void;
+  view?: TableViewState;
+  onViewChange?: (view: TableViewState) => void;
 };
 
 const PAGE_SIZE = 15;
@@ -126,6 +128,8 @@ export function ApplicationTable({
   applications,
   loading,
   onRowClick,
+  view,
+  onViewChange,
 }: ApplicationTableProps) {
   return (
     <Table
@@ -140,6 +144,8 @@ export function ApplicationTable({
       loading={loading}
       emptyMessage="No applications match this view."
       onRowClick={onRowClick}
+      view={view}
+      onViewChange={onViewChange}
     />
   );
 }

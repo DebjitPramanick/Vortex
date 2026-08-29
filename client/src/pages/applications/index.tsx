@@ -1,16 +1,36 @@
-import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@components/atoms/button";
+import type { TableViewState } from "@components/molecules/table";
+import {
+  searchParamsFromTableView,
+  tableViewFromSearchParams,
+} from "@components/molecules/table";
 import { useApplicationStore } from "@store/useApplicationStore";
 import { ApplicationTable } from "./ApplicationTable";
 import { NewApplicationPopup } from "./NewApplicationPopup";
 
 function Applications() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { applications, loading, error, fetchAll } = useApplicationStore();
   const [createOpen, setCreateOpen] = useState(false);
 
   const closeCreate = useCallback(() => setCreateOpen(false), []);
+
+  const tableView = useMemo(
+    () => tableViewFromSearchParams(searchParams),
+    [searchParams],
+  );
+
+  const handleViewChange = useCallback(
+    (view: TableViewState) => {
+      setSearchParams((current) => searchParamsFromTableView(view, current), {
+        replace: true,
+      });
+    },
+    [setSearchParams],
+  );
 
   useEffect(() => {
     void fetchAll().catch(() => undefined);
@@ -39,6 +59,8 @@ function Applications() {
       <ApplicationTable
         applications={applications}
         loading={loading}
+        view={tableView}
+        onViewChange={handleViewChange}
         onRowClick={(row) => navigate(`/applications/${row.id}`)}
       />
 
