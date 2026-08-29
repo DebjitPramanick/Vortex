@@ -30,7 +30,7 @@ export function Avatar({
       {src ? (
         <img className="vx-avatar-image" src={src} alt="" />
       ) : (
-        <UserIcon className="vx-avatar-icon" aria-hidden="true" />
+        <UserIcon className="vx-avatar-icon" aria-hidden={true} />
       )}
     </span>
   );
