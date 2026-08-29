@@ -1,0 +1,70 @@
+.vx-status-select-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  min-width: 8.5rem;
+  height: 2.5rem;
+  padding: 0 2.25rem 0 1rem;
+  border: 1px solid var(--color-vortex-primary-hover);
+  border-radius: var(--radius-vortex-sm);
+  background: var(--color-vortex-primary);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgb(79 70 229 / 0.28);
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.vx-status-select-wrap:hover {
+  background: var(--color-vortex-primary-hover);
+  border-color: #3730a3;
+  box-shadow: 0 2px 8px rgb(79 70 229 / 0.32);
+}
+
+.vx-status-select-wrap:focus-within {
+  outline: 2px solid rgb(79 70 229 / 0.35);
+  outline-offset: 2px;
+}
+
+.vx-status-select-wrap:has(.vx-status-select:disabled) {
+  cursor: not-allowed;
+  opacity: 0.55;
+  box-shadow: none;
+}
+
+.vx-status-select {
+  appearance: none;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+}
+
+.vx-status-select:disabled {
+  cursor: not-allowed;
+}
+
+.vx-status-select:focus {
+  outline: none;
+}
+
+.vx-status-select-caret {
+  position: absolute;
+  right: 0.75rem;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  color: inherit;
+}

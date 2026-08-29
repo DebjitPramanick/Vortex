@@ -1,7 +1,9 @@
 import { NavLink } from "react-router-dom";
+import { Avatar } from "../../atoms/avatar";
 import { Button } from "../../atoms/button";
 import ApplicationsIcon from "@icons/applications.svg";
 import StatIcon from "@icons/stat.svg";
+import LogoutIcon from "@icons/logout.svg";
 import "./sidebar.css";
 
 export type SidebarProps = {
@@ -35,13 +37,19 @@ export function Sidebar({ email, onSignOut }: SidebarProps) {
 
       <div className="vx-sidebar-footer">
         <div className="vx-sidebar-user">
+          <Avatar size="md" alt={email ?? "Signed in"} />
           <p className="vx-sidebar-email" title={email ?? undefined}>
             {email ?? "Signed in"}
           </p>
           {onSignOut ? (
-            <Button type="button" size="sm" variant="ghost" onClick={onSignOut}>
-              Sign out
-            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              icon={<LogoutIcon />}
+              aria-label="Sign out"
+              onClick={onSignOut}
+            />
           ) : null}
         </div>
       </div>

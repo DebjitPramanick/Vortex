@@ -9,26 +9,19 @@ import {
   CardTitle,
 } from "@components/atoms/card";
 import { Button } from "@components/atoms/button";
-import { Chip } from "@components/molecules/chip";
-import type { ChipVariant } from "@components/molecules/chip";
 import { Detail } from "./Detail";
 import { EditApplicationPopup } from "./EditApplicationPopup";
+import { StatusSelect } from "./StatusSelect";
 import { useApplicationStore } from "@store/useApplicationStore";
-import type { JobApplication, Salary } from "@app-types/application";
+import type {
+  ApplicationStatus,
+  JobApplication,
+  Salary,
+} from "@app-types/application";
 import { formatLocation } from "@utils/location.helper";
 import { fetchJobDetailsFromUrl } from "@utils/fetchJobDetailsFromUrl.helper";
 import EditIcon from "@icons/edit.svg";
 import FetchIcon from "@icons/fetch.svg";
-
-const STATUS_LABEL: Record<JobApplication["status"], string> = {
-  saved: "Saved",
-  applied: "Applied",
-  screening: "Screening",
-  interview: "Interview",
-  offer: "Offer",
-  rejected: "Rejected",
-  withdrawn: "Withdrawn",
-};
 
 function formatSalary(salary: Salary | null): string {
   if (!salary) return "Not set";
@@ -222,12 +215,33 @@ function ApplicationDetails() {
     update,
   } = useApplicationStore();
   const [editOpen, setEditOpen] = useState(false);
+  const [updatingStatus, setUpdatingStatus] = useState(false);
+  const [statusError, setStatusError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!id) return;
     void fetchById(id).catch(() => undefined);
     void fetchStatusHistory(id).catch(() => undefined);
   }, [id, fetchById, fetchStatusHistory]);
+
+  async function handleStatusChange(status: ApplicationStatus) {
+    if (!selected || status === selected.status) return;
+
+    setStatusError(null);
+    setUpdatingStatus(true);
+    try {
+      await update(selected.id, { status });
+      await fetchStatusHistory(selected.id);
+    } catch (caught) {
+      setStatusError(
+        caught instanceof Error
+          ? caught.message
+          : "Could not update the application status.",
+      );
+    } finally {
+      setUpdatingStatus(false);
+    }
+  }
 
   if (!id) {
     return (
@@ -272,17 +286,26 @@ function ApplicationDetails() {
         >
           ← Applications
         </Link>
-        <div className="mt-3 flex flex-wrap items-start justify-between gap-3">
-          <div>
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+          <div className="min-w-0">
             <h1 className="vx-page-title">{selected.company}</h1>
             <p className="mt-1 text-[13px] text-vortex-secondary">
               {selected.role}
+              <span className="mx-1.5 text-vortex-muted" aria-hidden="true">
+                ·
+              </span>
+              {formatLocation(selected.location)}
             </p>
           </div>
-          <Chip variant={selected.status as ChipVariant}>
-            {STATUS_LABEL[selected.status]}
-          </Chip>
+          <StatusSelect
+            value={selected.status}
+            disabled={updatingStatus}
+            onChange={(status) => void handleStatusChange(status)}
+          />
         </div>
+        {statusError ? (
+          <p className="mt-2 text-[13px] text-vortex-error">{statusError}</p>
+        ) : null}
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
@@ -304,10 +327,6 @@ function ApplicationDetails() {
           <CardBody>
             <dl className="grid gap-4 sm:grid-cols-2">
               <Detail label="Application ID" value={selected.id} mono />
-              <Detail
-                label="Location"
-                value={formatLocation(selected.location)}
-              />
               <Detail
                 label="Job type"
                 value={selected.job_type ? titleCase(selected.job_type) : "—"}
