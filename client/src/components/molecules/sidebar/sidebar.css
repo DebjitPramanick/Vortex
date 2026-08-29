@@ -1,0 +1,65 @@
+.vx-sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 15.5rem;
+  background: var(--color-vortex-surface);
+  border-right: 1px solid var(--color-vortex-border);
+}
+
+.vx-sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  height: 3.5rem;
+  padding: 0 1rem;
+  border-bottom: 1px solid var(--color-vortex-border);
+  text-decoration: none;
+  color: inherit;
+}
+
+.vx-sidebar-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--radius-vortex-sm);
+  background: var(--color-vortex-primary);
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+}
+
+.vx-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  flex: 1;
+  padding: 0.75rem;
+}
+
+.vx-sidebar-link {
+  text-decoration: none;
+}
+
+.vx-sidebar-footer {
+  border-top: 1px solid var(--color-vortex-border);
+  padding: 0.75rem;
+}
+
+.vx-sidebar-user {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.vx-sidebar-email {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  color: var(--color-vortex-secondary);
+}

@@ -1,0 +1,45 @@
+.vx-app-table-wrap {
+  overflow-x: auto;
+}
+
+.vx-app-table {
+  width: 100%;
+  min-width: 44rem;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.vx-app-table th {
+  padding: 0.625rem 1rem;
+  border-bottom: 1px solid var(--color-vortex-border);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-vortex-muted);
+}
+
+.vx-app-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-vortex-border);
+  font-size: 0.8125rem;
+  vertical-align: middle;
+}
+
+.vx-app-table tbody tr {
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.vx-app-table tbody tr:hover {
+  background: var(--color-vortex-bg);
+}
+
+.vx-app-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.vx-app-table-empty {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: var(--color-vortex-secondary);
+  font-size: 0.8125rem;
+}
