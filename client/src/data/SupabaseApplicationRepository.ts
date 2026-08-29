@@ -7,7 +7,8 @@ import type {
 } from "../types/application.ts";
 import type { Database } from "../types/database.ts";
 
-type ApplicationUpdate = Database["public"]["Tables"]["job_applications"]["Update"];
+type ApplicationUpdate =
+  Database["public"]["Tables"]["job_applications"]["Update"];
 
 function throwIfError(error: { message: string } | null): void {
   if (error) {
@@ -26,7 +27,7 @@ export class SupabaseApplicationRepository implements ApplicationRepository {
     const { data, error } = await this.client
       .from("job_applications")
       .select("*")
-      .order("created_at", { ascending: false });
+      .order("applied_at", { ascending: false });
 
     throwIfError(error);
     return data ?? [];
@@ -125,9 +126,7 @@ export class SupabaseApplicationRepository implements ApplicationRepository {
     throwIfError(error);
   }
 
-  async getStatusHistory(
-    applicationId: string,
-  ): Promise<StatusHistoryEntry[]> {
+  async getStatusHistory(applicationId: string): Promise<StatusHistoryEntry[]> {
     const { data, error } = await this.client
       .from("status_history")
       .select("*")
