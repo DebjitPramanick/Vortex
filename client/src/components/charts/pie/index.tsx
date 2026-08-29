@@ -39,7 +39,11 @@ function toSlice(
   const name = String(row[nameKey] ?? "").trim() || "Unknown";
   const value = Number(row[dataKey]);
   if (!Number.isFinite(value) || value <= 0) return null;
-  return { name, value, fill: chartColor(index) };
+  const fill =
+    typeof row.fill === "string" && row.fill.startsWith("#")
+      ? row.fill
+      : chartColor(index);
+  return { name, value, fill };
 }
 
 function renderSliceLabel({
@@ -148,16 +152,10 @@ export default function VxPieChart({
     return prepared;
   }, [data, nameKey, dataKey]);
 
-  const legendItems = useMemo(() => {
-    return slices
-      .sort((a, b) => b.value - a.value)
-      .map((slice) => {
-        return {
-          name: slice.name,
-          value: slice.value,
-        };
-      });
-  }, [slices]);
+  const legendItems = useMemo(
+    () => [...slices].sort((a, b) => b.value - a.value),
+    [slices],
+  );
 
   const total = slices.reduce((sum, slice) => sum + slice.value, 0);
 

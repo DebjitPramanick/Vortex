@@ -1,6 +1,32 @@
-import type { JobApplication } from "@app-types/application";
+import { eachDayOfInterval, format, parseISO, subDays } from "date-fns";
+import type { ApplicationStatus, JobApplication } from "@app-types/application";
+import type {
+  ApplicationCountByDay,
+  ApplicationCountByLocation,
+  ApplicationCountByStatus,
+} from "@app-types/chart.type";
+import { APPLICATION_STATUSES } from "./fetchJobDetailsFromUrl.helper";
 import { formatLocation } from "./location.helper";
-import type { ApplicationCountByLocation } from "@app-types/chart.type";
+
+const STATUS_LABEL: Record<ApplicationStatus, string> = {
+  saved: "Saved",
+  applied: "Applied",
+  screening: "Screening",
+  interview: "Interview",
+  offer: "Offer",
+  rejected: "Rejected",
+  withdrawn: "Withdrawn",
+};
+
+const STATUS_CHART_COLOR: Record<ApplicationStatus, string> = {
+  saved: "#475569",
+  applied: "#4f46e5",
+  screening: "#0891b2",
+  interview: "#7c3aed",
+  offer: "#059669",
+  rejected: "#e11d48",
+  withdrawn: "#d97706",
+};
 
 const THEME_CHART_COLORS = [
   "#4f46e5",
@@ -34,9 +60,11 @@ function shiftHex(hex: string, amount: number): string {
 }
 
 export class ChartHelper {
+  private applications: JobApplication[];
   private applicationsByLocation: Record<string, JobApplication[]>;
 
   constructor(applications: JobApplication[]) {
+    this.applications = applications;
     this.applicationsByLocation = this.groupByLocation(applications);
   }
 
@@ -63,4 +91,62 @@ export class ChartHelper {
       [],
     );
   }
+
+  public numberOfApplicationsByStatus(): ApplicationCountByStatus[] {
+    const counts = new Map<ApplicationStatus, number>();
+    for (const application of this.applications) {
+      counts.set(application.status, (counts.get(application.status) ?? 0) + 1);
+    }
+
+    return APPLICATION_STATUSES.filter(
+      (status) => (counts.get(status) ?? 0) > 0,
+    ).map((status) => ({
+        status,
+        statusLabel: STATUS_LABEL[status],
+        count: counts.get(status) ?? 0,
+        fill: STATUS_CHART_COLOR[status],
+      }),
+    );
+  }
+
+  public numberOfApplicationsByDay(
+    days: number,
+    now: Date = new Date(),
+  ): ApplicationCountByDay[] {
+    const windowSize = Math.max(1, Math.floor(days));
+    const end = startOfLocalDay(now);
+    const start = subDays(end, windowSize - 1);
+    const counts = new Map<string, number>();
+
+    for (const application of this.applications) {
+      const key = appliedDayKey(application.applied_at);
+      const day = parseLocalDay(key);
+      if (day < start || day > end) continue;
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+    }
+
+    return eachDayOfInterval({ start, end }).map((day) => {
+      const date = format(day, "yyyy-MM-dd");
+      return {
+        date,
+        label: format(day, "d MMM"),
+        count: counts.get(date) ?? 0,
+      };
+    });
+  }
+}
+
+function appliedDayKey(appliedAt: string): string {
+  const dateOnly = appliedAt.slice(0, 10);
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateOnly)) return dateOnly;
+  return format(parseISO(appliedAt), "yyyy-MM-dd");
+}
+
+function parseLocalDay(key: string): Date {
+  const [year, month, day] = key.split("-").map(Number);
+  return new Date(year, month - 1, day);
+}
+
+function startOfLocalDay(value: Date): Date {
+  return new Date(value.getFullYear(), value.getMonth(), value.getDate());
 }
