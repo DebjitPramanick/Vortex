@@ -135,7 +135,7 @@ export default function VxPieChart({
   data,
   nameKey = "name",
   dataKey = "value",
-  isAnimationActive = true,
+  isAnimationActive = false,
 }: VxPieChartProps) {
   const [activeName, setActiveName] = useState<string | null>(null);
 
@@ -147,6 +147,17 @@ export default function VxPieChart({
     });
     return prepared;
   }, [data, nameKey, dataKey]);
+
+  const legendItems = useMemo(() => {
+    return slices
+      .sort((a, b) => b.value - a.value)
+      .map((slice) => {
+        return {
+          name: slice.name,
+          value: slice.value,
+        };
+      });
+  }, [slices]);
 
   const total = slices.reduce((sum, slice) => sum + slice.value, 0);
 
@@ -179,7 +190,9 @@ export default function VxPieChart({
             content={({ active, payload }) => (
               <PieTooltip
                 active={active}
-                payload={payload as unknown as ReadonlyArray<{ payload?: Slice }>}
+                payload={
+                  payload as unknown as ReadonlyArray<{ payload?: Slice }>
+                }
                 total={total}
               />
             )}
@@ -187,7 +200,7 @@ export default function VxPieChart({
         </PieChart>
       </div>
       <ul className="vx-pie-legend" aria-label="Chart legend">
-        {slices.map((slice, index) => {
+        {legendItems.map((slice, index) => {
           const percent = (slice.value / total) * 100;
           return (
             <li key={`${slice.name}-${index}`}>
