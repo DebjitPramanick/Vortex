@@ -27,6 +27,16 @@ export type Salary = {
   currency: Currency;
 };
 
+export type JobType = "remote" | "onsite" | "hybrid";
+
+export type Location = {
+  name: string;
+  country: string;
+  countryCode: string;
+  lat: number;
+  lng: number;
+};
+
 export type JobApplication = {
   id: string;
   user_id: string;
@@ -35,9 +45,10 @@ export type JobApplication = {
   salary: Salary | null;
   status: ApplicationStatus;
   source: Source | null;
-  location: string;
+  location: Location;
   job_url: string;
   job_description: string | null;
+  job_type: JobType | null;
   notes: string | null;
   applied_at: string;
   created_at: string;
@@ -50,9 +61,10 @@ export type NewApplication = {
   salary?: Salary | null;
   status?: ApplicationStatus;
   source?: Source | null;
-  location: string;
+  location: Location;
   job_url: string;
   job_description?: string | null;
+  job_type?: JobType | null;
   notes?: string | null;
   applied_at: string;
 };

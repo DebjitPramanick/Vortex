@@ -1,5 +1,5 @@
 import { format, parseISO } from "date-fns";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   Card,
@@ -8,10 +8,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@components/atoms/card";
+import { Button } from "@components/atoms/button";
 import { Chip } from "@components/molecules/chip";
 import type { ChipVariant } from "@components/molecules/chip";
+import { Detail } from "./Detail";
+import { EditApplicationPopup } from "./EditApplicationPopup";
 import { useApplicationStore } from "@store/useApplicationStore";
 import type { JobApplication, Salary } from "@app-types/application";
+import { formatLocation } from "@utils/location.helper";
+import EditIcon from "@icons/edit.svg";
 
 const STATUS_LABEL: Record<JobApplication["status"], string> = {
   saved: "Saved",
@@ -43,16 +48,15 @@ function formatDate(value: string): string {
   }
 }
 
+function titleCase(value: string): string {
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
 export function ApplicationDetails() {
   const { id } = useParams<{ id: string }>();
-  const {
-    selected,
-    statusHistory,
-    loading,
-    error,
-    fetchById,
-    fetchStatusHistory,
-  } = useApplicationStore();
+  const { selected, statusHistory, loading, error, fetchById, fetchStatusHistory } =
+    useApplicationStore();
+  const [editOpen, setEditOpen] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -123,12 +127,32 @@ export function ApplicationDetails() {
               <CardTitle>Details</CardTitle>
               <CardDescription>Role metadata and notes</CardDescription>
             </div>
+            <Button
+              size="sm"
+              variant="secondary"
+              icon={<EditIcon />}
+              onClick={() => setEditOpen(true)}
+            >
+              Edit
+            </Button>
           </CardHeader>
           <CardBody>
             <dl className="grid gap-4 sm:grid-cols-2">
               <Detail label="Application ID" value={selected.id} mono />
-              <Detail label="Location" value={selected.location} />
-              <Detail label="Source" value={selected.source ?? "—"} />
+              <Detail
+                label="Location"
+                value={formatLocation(selected.location)}
+              />
+              <Detail
+                label="Job type"
+                value={
+                  selected.job_type ? titleCase(selected.job_type) : "—"
+                }
+              />
+              <Detail
+                label="Source"
+                value={selected.source ? titleCase(selected.source) : "—"}
+              />
               <Detail
                 label="Salary"
                 value={formatSalary(selected.salary)}
@@ -156,12 +180,12 @@ export function ApplicationDetails() {
                   )
                 }
               />
+              <Detail
+                label="Notes"
+                className="sm:col-span-2"
+                value={selected.notes?.trim() ? selected.notes : "—"}
+              />
             </dl>
-            {selected.notes ? (
-              <p className="mt-5 rounded-vortex-sm border border-vortex-border bg-vortex-bg p-3 text-[13px] text-vortex-secondary">
-                {selected.notes}
-              </p>
-            ) : null}
           </CardBody>
         </Card>
 
@@ -194,27 +218,12 @@ export function ApplicationDetails() {
           </CardBody>
         </Card>
       </div>
-    </div>
-  );
-}
 
-function Detail({
-  label,
-  value,
-  mono = false,
-}: {
-  label: string;
-  value: ReactNode;
-  mono?: boolean;
-}) {
-  return (
-    <div>
-      <dt className="text-[12px] text-vortex-muted">{label}</dt>
-      <dd
-        className={`mt-1 text-[13px] ${mono ? "vx-meta text-vortex-fg" : "text-vortex-fg"}`}
-      >
-        {value}
-      </dd>
+      <EditApplicationPopup
+        open={editOpen}
+        application={selected}
+        onClose={() => setEditOpen(false)}
+      />
     </div>
   );
 }

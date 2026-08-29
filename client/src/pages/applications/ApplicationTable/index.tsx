@@ -2,7 +2,12 @@ import { format, parseISO } from "date-fns";
 import { Chip } from "@components/molecules/chip";
 import type { ChipVariant } from "@components/molecules/chip";
 import { Table, type TableColumn } from "@components/molecules/table";
-import type { JobApplication, Salary } from "../../../types/application.ts";
+import type {
+  JobApplication,
+  JobType,
+  Salary,
+} from "../../../types/application.ts";
+import { formatLocation } from "@utils/location.helper";
 
 export type ApplicationTableProps = {
   applications: JobApplication[];
@@ -10,7 +15,7 @@ export type ApplicationTableProps = {
   onRowClick?: (application: JobApplication) => void;
 };
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 15;
 
 const STATUS_LABEL: Record<JobApplication["status"], string> = {
   saved: "Saved",
@@ -20,6 +25,12 @@ const STATUS_LABEL: Record<JobApplication["status"], string> = {
   offer: "Offer",
   rejected: "Rejected",
   withdrawn: "Withdrawn",
+};
+
+const JOB_TYPE_LABEL: Record<JobType, string> = {
+  remote: "Remote",
+  onsite: "On-site",
+  hybrid: "Hybrid",
 };
 
 function formatSalary(salary: Salary | null): string {
@@ -71,10 +82,24 @@ const COLUMNS: TableColumn<JobApplication>[] = [
   {
     id: "location",
     header: "Location",
-    getSortValue: (row) => row.location,
-    getFilterValue: (row) => row.location,
+    getSortValue: (row) => formatLocation(row.location),
+    getFilterValue: (row) => formatLocation(row.location),
     render: (row) => (
-      <span className="text-vortex-secondary">{row.location}</span>
+      <span className="text-vortex-secondary">
+        {formatLocation(row.location)}
+      </span>
+    ),
+  },
+  {
+    id: "job_type",
+    header: "Type",
+    getSortValue: (row) => row.job_type ?? "",
+    getFilterValue: (row) =>
+      row.job_type ? JOB_TYPE_LABEL[row.job_type] : "—",
+    render: (row) => (
+      <span className="text-vortex-secondary">
+        {row.job_type ? JOB_TYPE_LABEL[row.job_type] : "—"}
+      </span>
     ),
   },
   {
@@ -109,7 +134,7 @@ export function ApplicationTable({
       getRowId={(row) => row.id}
       searchPlaceholder="Search company, role, or ID"
       getSearchValue={(row) =>
-        `${row.company} ${row.role} ${row.location} ${row.id}`
+        `${row.company} ${row.role} ${formatLocation(row.location)} ${row.id}`
       }
       pageSize={PAGE_SIZE}
       loading={loading}

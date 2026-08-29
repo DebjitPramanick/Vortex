@@ -67,6 +67,7 @@ export class SupabaseApplicationRepository implements ApplicationRepository {
         location: input.location,
         job_url: input.job_url,
         job_description: input.job_description ?? null,
+        job_type: input.job_type ?? null,
         notes: input.notes ?? null,
         applied_at: input.applied_at,
       })
@@ -151,6 +152,7 @@ function toUpdatePayload(changes: Partial<JobApplication>): ApplicationUpdate {
   if (changes.job_description !== undefined) {
     payload.job_description = changes.job_description;
   }
+  if (changes.job_type !== undefined) payload.job_type = changes.job_type;
   if (changes.notes !== undefined) payload.notes = changes.notes;
   if (changes.applied_at !== undefined) payload.applied_at = changes.applied_at;
 

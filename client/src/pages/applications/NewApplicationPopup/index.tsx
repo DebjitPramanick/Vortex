@@ -4,7 +4,7 @@ import { Modal } from "@components/molecules/modal";
 import { useApplicationStore } from "@store/useApplicationStore";
 import type { JobApplication, NewApplication } from "@app-types/application";
 import { FetchJobFromUrl } from "../FetchJobFromUrl";
-import type { FetchedJobDetails } from "@utils/fetchJobDetailsFromUrl";
+import type { FetchedJobDetails } from "@utils/fetchJobDetailsFromUrl.helper";
 import { ManualApplicationForm } from "../ManualApplicationForm";
 import "./index.css";
 
@@ -50,6 +50,7 @@ export function NewApplicationPopup({
       location: details.location,
       job_url: details.job_url,
       job_description: details.job_description,
+      job_type: details.job_type ?? null,
     });
     setStep("manual");
   };

@@ -41,3 +41,11 @@
   color: var(--color-vortex-error);
   font-size: 0.8125rem;
 }
+
+textarea.vx-input {
+  height: auto;
+  min-height: 5rem;
+  padding: 0.5rem 0.75rem;
+  resize: vertical;
+  line-height: 1.4;
+}

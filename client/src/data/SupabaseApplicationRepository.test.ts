@@ -7,10 +7,18 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 type AppRow = JobApplication;
 type HistoryRow = StatusHistoryEntry;
 
+const sampleLocation = {
+  name: "Remote",
+  country: "",
+  countryCode: "",
+  lat: 0,
+  lng: 0,
+};
+
 const sampleInput: NewApplication = {
   company: "Linear",
   role: "Product Engineer",
-  location: "Remote",
+  location: sampleLocation,
   job_url: "https://linear.app/careers",
   applied_at: "2026-08-29",
   source: "linkedin",
@@ -110,9 +118,10 @@ function createApplicationsBuilder(
         salary: payload.salary ?? null,
         status: payload.status ?? "saved",
         source: payload.source ?? null,
-        location: payload.location ?? "",
+        location: payload.location ?? sampleLocation,
         job_url: payload.job_url ?? "",
         job_description: payload.job_description ?? null,
+        job_type: payload.job_type ?? null,
         notes: payload.notes ?? null,
         applied_at: payload.applied_at ?? now,
         created_at: now,
@@ -212,7 +221,7 @@ describe("SupabaseApplicationRepository", () => {
     expect(created.company).toBe("Linear");
     expect(created.status).toBe("saved");
     expect(created.user_id).toBe("user-1");
-    expect(created.location).toBe("Remote");
+    expect(created.location).toEqual(sampleLocation);
     expect(created.job_url).toBe("https://linear.app/careers");
     expect(created.source).toBe("linkedin");
     expect(created.salary).toEqual({ amount: 180000, currency: "USD" });

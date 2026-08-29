@@ -1,8 +1,9 @@
-import type { NewApplication } from "../types/application";
+import { fetchLocation } from "./location.helper.ts";
+import type { JobType, NewApplication } from "../types/application";
 
 export type FetchedJobDetails = Pick<
   NewApplication,
-  "company" | "role" | "location" | "job_url"
+  "company" | "role" | "location" | "job_url" | "job_type"
 > & {
   job_description: string | null;
 };
@@ -15,6 +16,16 @@ export const APPLICATION_STATUSES = [
   "offer",
   "rejected",
   "withdrawn",
+] as const;
+
+export const JOB_TYPES = ["remote", "onsite", "hybrid"] as const;
+
+export const SOURCES = [
+  "indeed",
+  "linkedin",
+  "glassdoor",
+  "other",
+  "referred",
 ] as const;
 
 export const CURRENCIES = [
@@ -108,6 +119,14 @@ class InformationExtractor {
     return parseInt(salary);
   }
 
+  private getJobType(): JobType | null {
+    const location = this.getLocation();
+    const value = location.toLowerCase();
+    if (/\bhybrid\b/.test(value)) return "hybrid";
+    if (/\bremote\b/.test(value)) return "remote";
+    return null;
+  }
+
   public extract() {
     return {
       company: this.getCompany(),
@@ -116,6 +135,7 @@ class InformationExtractor {
       job_url: this.parsed.href,
       salary: this.getSalary(),
       job_description: this.getJobDescription(),
+      job_type: this.getJobType(),
     };
   }
 }
@@ -166,5 +186,8 @@ export async function fetchJobDetailsFromUrl(
     throw new Error("Could not fetch job details from this URL.");
   }
 
-  return jobDetails;
+  return {
+    ...jobDetails,
+    location: await fetchLocation(jobDetails.location),
+  };
 }

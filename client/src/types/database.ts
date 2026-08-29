@@ -1,4 +1,4 @@
-import type { ApplicationStatus, Currency, Salary, Source } from "./application.ts";
+import type { ApplicationStatus, Currency, JobType, Location, Salary, Source } from "./application.ts";
 
 export type Json =
   | string
@@ -20,9 +20,10 @@ export type Database = {
           salary: Salary | null;
           status: ApplicationStatus;
           source: Source | null;
-          location: string;
+          location: Location;
           job_url: string;
           job_description: string | null;
+          job_type: JobType | null;
           notes: string | null;
           applied_at: string;
           created_at: string;
@@ -36,9 +37,10 @@ export type Database = {
           salary?: Salary | null;
           status?: ApplicationStatus;
           source?: Source | null;
-          location: string;
+          location: Location;
           job_url: string;
           job_description?: string | null;
+          job_type?: JobType | null;
           notes?: string | null;
           applied_at: string;
           created_at?: string;
@@ -50,9 +52,10 @@ export type Database = {
           salary?: Salary | null;
           status?: ApplicationStatus;
           source?: Source | null;
-          location?: string;
+          location?: Location;
           job_url?: string;
           job_description?: string | null;
+          job_type?: JobType | null;
           notes?: string | null;
           applied_at?: string;
           updated_at?: string;
@@ -99,6 +102,7 @@ export type Database = {
       application_status: ApplicationStatus;
       application_source: Source;
       currency: Currency;
+      job_type: JobType;
     };
     CompositeTypes: {
       [_ in never]: never;

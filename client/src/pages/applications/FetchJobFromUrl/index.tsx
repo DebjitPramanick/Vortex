@@ -3,7 +3,7 @@ import { Button } from "@components/atoms/button";
 import {
   fetchJobDetailsFromUrl,
   type FetchedJobDetails,
-} from "@utils/fetchJobDetailsFromUrl";
+} from "@utils/fetchJobDetailsFromUrl.helper";
 import "./index.css";
 
 export type FetchJobFromUrlProps = {
