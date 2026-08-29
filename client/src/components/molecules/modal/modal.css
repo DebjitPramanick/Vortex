@@ -1,0 +1,90 @@
+.vx-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgb(15 23 42 / 0.4);
+}
+
+.vx-modal {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: min(36rem, calc(100svh - 2rem));
+  background: var(--color-vortex-surface);
+  border: 1px solid var(--color-vortex-border);
+  border-radius: var(--radius-vortex);
+  box-shadow: var(--shadow-vortex-sm);
+}
+
+.vx-modal-sm {
+  max-width: 22rem;
+}
+
+.vx-modal-md {
+  max-width: 32rem;
+}
+
+.vx-modal-lg {
+  max-width: 42rem;
+}
+
+.vx-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem 1rem 0.75rem;
+}
+
+.vx-modal-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-vortex-fg);
+}
+
+.vx-modal-description {
+  margin: 0.25rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--color-vortex-secondary);
+}
+
+.vx-modal-body {
+  padding: 0 1rem 1rem;
+  overflow: auto;
+  font-size: 0.875rem;
+  color: var(--color-vortex-secondary);
+}
+
+.vx-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem 1rem;
+  border-top: 1px solid var(--color-vortex-border);
+}
+
+.vx-modal-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: var(--radius-vortex-sm);
+  background: transparent;
+  color: var(--color-vortex-muted);
+  cursor: pointer;
+}
+
+.vx-modal-close:hover {
+  background: var(--color-vortex-bg);
+  color: var(--color-vortex-fg);
+}

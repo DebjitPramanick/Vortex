@@ -1,113 +1,179 @@
 @import "tailwindcss";
 
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+@theme {
+  --color-vortex-bg: #f8fafc;
+  --color-vortex-surface: #ffffff;
+  --color-vortex-border: #e2e8f0;
+  --color-vortex-primary: #4f46e5;
+  --color-vortex-primary-hover: #4338ca;
+  --color-vortex-primary-soft: #eef2ff;
+  --color-vortex-accent: #0891b2;
+  --color-vortex-accent-soft: #ecfeff;
+  --color-vortex-fg: #0f172a;
+  --color-vortex-secondary: #475569;
+  --color-vortex-muted: #94a3b8;
+  --color-vortex-success: #059669;
+  --color-vortex-success-soft: #ecfdf5;
+  --color-vortex-warning: #d97706;
+  --color-vortex-warning-soft: #fffbeb;
+  --color-vortex-error: #e11d48;
+  --color-vortex-error-soft: #fff1f2;
+  --color-vortex-interview: #7c3aed;
+  --color-vortex-interview-soft: #f5f3ff;
+  --color-vortex-slate-soft: #f1f5f9;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, SFMono-Regular, monospace;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --radius-vortex: 0.625rem;
+  --radius-vortex-sm: 0.5rem;
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
+  --shadow-vortex-sm: 0 1px 2px 0 rgb(15 23 42 / 0.04);
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100svh;
+    background: var(--color-vortex-bg);
+    color: var(--color-vortex-fg);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.011em;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  #root {
+    min-height: 100svh;
+  }
+
+  ::selection {
+    background: var(--color-vortex-primary-soft);
+    color: var(--color-vortex-primary);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-vortex-primary);
+    outline-offset: 2px;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font-family: inherit;
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+@layer components {
+  .vx-input {
+    width: 100%;
+    height: 2.25rem;
+    padding: 0 0.75rem;
+    background: var(--color-vortex-surface);
+    color: var(--color-vortex-fg);
+    border: 1px solid var(--color-vortex-border);
+    border-radius: var(--radius-vortex-sm);
+    font-size: 0.8125rem;
+    transition:
+      border-color 150ms ease,
+      box-shadow 150ms ease;
   }
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
+  .vx-input::placeholder {
+    color: var(--color-vortex-muted);
   }
-}
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-}
-
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+  .vx-input:hover:not(:disabled) {
+    border-color: #cbd5e1;
   }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
+
+  .vx-input:focus {
+    outline: none;
+    border-color: var(--color-vortex-primary);
+    box-shadow: 0 0 0 3px rgb(79 70 229 / 0.12);
   }
-}
-p {
-  margin: 0;
-}
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
+  .vx-input:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    background: var(--color-vortex-bg);
+  }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+  .vx-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    width: 100%;
+    padding: 0.4375rem 0.625rem;
+    border: 0;
+    border-radius: var(--radius-vortex-sm);
+    background: transparent;
+    color: var(--color-vortex-secondary);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    transition:
+      background-color 150ms ease,
+      color 150ms ease;
+  }
+
+  .vx-nav-item:hover {
+    background: var(--color-vortex-bg);
+    color: var(--color-vortex-fg);
+  }
+
+  .vx-nav-item[aria-current="page"] {
+    background: var(--color-vortex-primary-soft);
+    color: var(--color-vortex-primary);
+  }
+
+  .vx-metric {
+    font-family: var(--font-mono);
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1.15;
+    color: var(--color-vortex-fg);
+  }
+
+  .vx-meta {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 450;
+    color: var(--color-vortex-muted);
+    letter-spacing: -0.02em;
+  }
+
+  .vx-page-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.15;
+    color: var(--color-vortex-fg);
+  }
+
+  .vx-section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    color: var(--color-vortex-fg);
+  }
+
+  .vx-card-title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--color-vortex-fg);
+  }
 }

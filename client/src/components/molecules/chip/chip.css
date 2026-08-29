@@ -1,0 +1,94 @@
+.vx-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border: 0;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.vx-chip-sm {
+  height: 1.25rem;
+  padding: 0 0.375rem;
+  border-radius: 0.3125rem;
+  font-size: 0.625rem;
+}
+
+.vx-chip-md {
+  height: 1.375rem;
+  padding: 0 0.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.6875rem;
+}
+
+.vx-chip-lg {
+  height: 1.625rem;
+  padding: 0 0.625rem;
+  border-radius: 0.4375rem;
+  font-size: 0.75rem;
+}
+
+.vx-chip-neutral {
+  background: var(--color-vortex-slate-soft);
+  color: var(--color-vortex-secondary);
+}
+
+.vx-chip-saved {
+  background: var(--color-vortex-slate-soft);
+  color: var(--color-vortex-secondary);
+}
+
+.vx-chip-applied {
+  background: var(--color-vortex-primary-soft);
+  color: var(--color-vortex-primary);
+}
+
+.vx-chip-screening {
+  background: var(--color-vortex-accent-soft);
+  color: var(--color-vortex-accent);
+}
+
+.vx-chip-interview {
+  background: var(--color-vortex-interview-soft);
+  color: var(--color-vortex-interview);
+}
+
+.vx-chip-offer {
+  background: var(--color-vortex-success-soft);
+  color: var(--color-vortex-success);
+}
+
+.vx-chip-rejected {
+  background: var(--color-vortex-error-soft);
+  color: var(--color-vortex-error);
+}
+
+.vx-chip-withdrawn {
+  background: var(--color-vortex-warning-soft);
+  color: var(--color-vortex-warning);
+}
+
+.vx-chip-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.125rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  opacity: 0.7;
+  cursor: pointer;
+  border-radius: 0.25rem;
+}
+
+.vx-chip-remove:hover {
+  opacity: 1;
+}
+
+.vx-chip-remove:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 1px;
+}
