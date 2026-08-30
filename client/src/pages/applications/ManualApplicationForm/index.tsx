@@ -3,6 +3,7 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@components/atoms/button";
 import { LocationFinder } from "@components/molecules/location-finder";
+import { Select } from "@components/molecules/select";
 import type { Location, NewApplication, Source } from "@app-types/application";
 import {
   APPLICATION_STATUSES,
@@ -73,6 +74,10 @@ function selectedLocation(
 ): Location | null {
   if (!location) return null;
   return formatLocation(location) === "—" ? null : location;
+}
+
+function titleCase(value: string): string {
+  return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
 export function ManualApplicationForm({
@@ -174,25 +179,29 @@ export function ManualApplicationForm({
 
       <label className="vx-app-field">
         <span className="vx-app-label">Job type</span>
-        <select
-          className="vx-input"
-          value={form.watch("job_type") ?? ""}
-          onChange={(event) => {
-            const value = event.target.value;
-            form.setValue(
-              "job_type",
-              value === "" ? null : (value as (typeof JOB_TYPES)[number]),
-              { shouldDirty: true, shouldValidate: true },
-            );
-          }}
-        >
-          <option value="">Not set</option>
-          {JOB_TYPES.map((jobType) => (
-            <option key={jobType} value={jobType}>
-              {jobType.charAt(0).toUpperCase() + jobType.slice(1)}
-            </option>
-          ))}
-        </select>
+        <Controller
+          name="job_type"
+          control={form.control}
+          render={({ field }) => (
+            <Select
+              disabled={submitting}
+              value={field.value ?? ""}
+              placeholder="Not set"
+              options={[
+                { value: "", label: "Not set" },
+                ...JOB_TYPES.map((jobType) => ({
+                  value: jobType,
+                  label: titleCase(jobType),
+                })),
+              ]}
+              onChange={(value) =>
+                field.onChange(
+                  value === "" ? null : (value as (typeof JOB_TYPES)[number]),
+                )
+              }
+            />
+          )}
+        />
         {form.formState.errors.job_type ? (
           <p className="vx-app-error">
             {form.formState.errors.job_type.message}
@@ -202,13 +211,21 @@ export function ManualApplicationForm({
 
       <label className="vx-app-field">
         <span className="vx-app-label">Status</span>
-        <select className="vx-input" {...form.register("status")}>
-          {APPLICATION_STATUSES.map((status) => (
-            <option key={status} value={status}>
-              {status.charAt(0).toUpperCase() + status.slice(1)}
-            </option>
-          ))}
-        </select>
+        <Controller
+          name="status"
+          control={form.control}
+          render={({ field }) => (
+            <Select
+              disabled={submitting}
+              value={field.value}
+              options={APPLICATION_STATUSES.map((status) => ({
+                value: status,
+                label: titleCase(status),
+              }))}
+              onChange={field.onChange}
+            />
+          )}
+        />
         {form.formState.errors.status ? (
           <p className="vx-app-error">{form.formState.errors.status.message}</p>
         ) : null}
@@ -216,25 +233,27 @@ export function ManualApplicationForm({
 
       <label className="vx-app-field">
         <span className="vx-app-label">Source</span>
-        <select
-          className="vx-input"
-          value={form.watch("source") ?? ""}
-          onChange={(event) => {
-            const value = event.target.value;
-            form.setValue(
-              "source",
-              value === "" ? null : (value as Source),
-              { shouldDirty: true, shouldValidate: true },
-            );
-          }}
-        >
-          <option value="">Not set</option>
-          {SOURCES.map((source) => (
-            <option key={source} value={source}>
-              {source.charAt(0).toUpperCase() + source.slice(1)}
-            </option>
-          ))}
-        </select>
+        <Controller
+          name="source"
+          control={form.control}
+          render={({ field }) => (
+            <Select
+              disabled={submitting}
+              value={field.value ?? ""}
+              placeholder="Not set"
+              options={[
+                { value: "", label: "Not set" },
+                ...SOURCES.map((source) => ({
+                  value: source,
+                  label: titleCase(source),
+                })),
+              ]}
+              onChange={(value) =>
+                field.onChange(value === "" ? null : (value as Source))
+              }
+            />
+          )}
+        />
         {form.formState.errors.source ? (
           <p className="vx-app-error">{form.formState.errors.source.message}</p>
         ) : null}
@@ -258,13 +277,21 @@ export function ManualApplicationForm({
 
       <label className="vx-app-field">
         <span className="vx-app-label">Currency</span>
-        <select className="vx-input" {...form.register("salary_currency")}>
-          {CURRENCIES.map((currency) => (
-            <option key={currency} value={currency}>
-              {currency}
-            </option>
-          ))}
-        </select>
+        <Controller
+          name="salary_currency"
+          control={form.control}
+          render={({ field }) => (
+            <Select
+              disabled={submitting}
+              value={field.value}
+              options={CURRENCIES.map((currency) => ({
+                value: currency,
+                label: currency,
+              }))}
+              onChange={field.onChange}
+            />
+          )}
+        />
         {form.formState.errors.salary_currency ? (
           <p className="vx-app-error">
             {form.formState.errors.salary_currency.message}

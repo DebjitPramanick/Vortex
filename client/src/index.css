@@ -109,10 +109,6 @@
     background: var(--color-vortex-bg);
   }
 
-  select.vx-input {
-    cursor: pointer;
-  }
-
   .vx-nav-item {
     display: flex;
     align-items: center;

@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@components/atoms/card";
 import { Button } from "@components/atoms/button";
+import { Select } from "@components/molecules/select";
 import { useProfileStore } from "@store/useProfileStore";
 import { useResumeScoreStore } from "@store/useResumeScoreStore";
 import type { JobApplication } from "@app-types/application";
@@ -131,19 +132,19 @@ export function ScoreProfileCard({
             <span className="text-[12px] font-medium text-vortex-secondary">
               Profile
             </span>
-            <select
-              className="vx-input"
+            <Select
               value={profileId}
               disabled={scoring}
-              onChange={(event) => setProfileId(event.target.value)}
-            >
-              <option value="">Select a profile</option>
-              {profiles.map((profile) => (
-                <option key={profile.id} value={profile.id}>
-                  {profile.name}
-                </option>
-              ))}
-            </select>
+              placeholder="Select a profile"
+              options={[
+                { value: "", label: "Select a profile" },
+                ...profiles.map((profile) => ({
+                  value: profile.id,
+                  label: profile.name,
+                })),
+              ]}
+              onChange={setProfileId}
+            />
           </label>
 
           {profiles.length === 0 ? (
