@@ -154,6 +154,13 @@ function toUpdatePayload(changes: Partial<JobApplication>): ApplicationUpdate {
   }
   if (changes.job_type !== undefined) payload.job_type = changes.job_type;
   if (changes.notes !== undefined) payload.notes = changes.notes;
+  if (changes.profile_id !== undefined) payload.profile_id = changes.profile_id;
+  if (changes.resume_score_id !== undefined) {
+    payload.resume_score_id = changes.resume_score_id;
+  }
+  if (changes.resume_score !== undefined) {
+    payload.resume_score = changes.resume_score;
+  }
   if (changes.applied_at !== undefined) payload.applied_at = changes.applied_at;
 
   return payload;

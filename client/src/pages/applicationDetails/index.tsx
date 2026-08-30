@@ -11,6 +11,7 @@ import {
 import { Button } from "@components/atoms/button";
 import { Detail } from "./Detail";
 import { EditApplicationPopup } from "./EditApplicationPopup";
+import { ScoreProfileCard } from "./ScoreProfileCard";
 import { StatusSelect } from "./StatusSelect";
 import { useApplicationStore } from "@store/useApplicationStore";
 import type {
@@ -117,7 +118,7 @@ function JobDescriptionCard({
   }
 
   return (
-    <Card className="lg:col-span-3">
+    <Card className="lg:col-span-2">
       <CardHeader>
         <div>
           <CardTitle>Job Description</CardTitle>
@@ -402,6 +403,12 @@ function ApplicationDetails() {
 
         <JobDescriptionCard
           key={selected.id}
+          application={selected}
+          onUpdate={update}
+        />
+
+        <ScoreProfileCard
+          key={`${selected.id}-score`}
           application={selected}
           onUpdate={update}
         />

@@ -25,6 +25,9 @@ export type Database = {
           job_description: string | null;
           job_type: JobType | null;
           notes: string | null;
+          profile_id: string | null;
+          resume_score_id: string | null;
+          resume_score: number | null;
           applied_at: string;
           created_at: string;
           updated_at: string;
@@ -42,6 +45,9 @@ export type Database = {
           job_description?: string | null;
           job_type?: JobType | null;
           notes?: string | null;
+          profile_id?: string | null;
+          resume_score_id?: string | null;
+          resume_score?: number | null;
           applied_at: string;
           created_at?: string;
           updated_at?: string;
@@ -57,10 +63,28 @@ export type Database = {
           job_description?: string | null;
           job_type?: JobType | null;
           notes?: string | null;
+          profile_id?: string | null;
+          resume_score_id?: string | null;
+          resume_score?: number | null;
           applied_at?: string;
           updated_at?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "job_applications_profile_id_fkey";
+            columns: ["profile_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "job_applications_resume_score_id_fkey";
+            columns: ["resume_score_id"];
+            isOneToOne: false;
+            referencedRelation: "resume_scores";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       status_history: {
         Row: {

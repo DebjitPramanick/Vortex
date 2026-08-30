@@ -50,6 +50,9 @@ export type JobApplication = {
   job_description: string | null;
   job_type: JobType | null;
   notes: string | null;
+  profile_id: string | null;
+  resume_score_id: string | null;
+  resume_score: number | null;
   applied_at: string;
   created_at: string;
   updated_at: string;

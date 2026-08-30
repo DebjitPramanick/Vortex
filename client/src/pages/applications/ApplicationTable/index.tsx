@@ -14,6 +14,9 @@ import type {
 import { formatLocation } from "@utils/location.helper";
 import { Button } from "@components/atoms/button";
 import CopyIcon from "@icons/copy.svg";
+import FireIcon from "@icons/fire.svg";
+import MoonIcon from "@icons/moon.svg";
+import SadIcon from "@icons/sad.svg";
 
 export type ApplicationTableProps = {
   applications: JobApplication[];
@@ -129,13 +132,47 @@ const COLUMNS: TableColumn<JobApplication>[] = [
     ),
   },
   {
-    id: "applied",
-    header: "Applied",
+    id: "appliedOn",
+    header: "Applied On",
     getSortValue: (row) => Date.parse(row.applied_at) || row.applied_at,
     getFilterValue: (row) => formatDate(row.applied_at),
     render: (row) => (
       <span className="vx-meta">{formatDate(row.applied_at)}</span>
     ),
+  },
+  {
+    id: "resumeScore",
+    header: "Resume Score",
+    filterable: false,
+    getSortValue: (row) => row.resume_score ?? null,
+    render: (row) => {
+      let color = "text-vortex-secondary";
+      let icon = null;
+      let variant: ChipVariant = "saved";
+      if (row.resume_score) {
+        if (row.resume_score > 90) {
+          color = "text-vortex-success";
+          icon = <FireIcon className="w-4 h-4" />;
+          variant = "offer";
+        } else if (row.resume_score > 80 && row.resume_score < 90) {
+          color = "text-vortex-warning";
+          icon = <MoonIcon className="w-4 h-4" />;
+          variant = "interview";
+        } else if (row.resume_score < 50) {
+          color = "text-vortex-error";
+          icon = <SadIcon className="w-4 h-4" />;
+          variant = "rejected";
+        }
+      }
+      return (
+        <Chip
+          variant={variant}
+          className={`vx-meta ${color} flex items-center gap-2`}
+        >
+          {icon} {row.resume_score ?? "—"}
+        </Chip>
+      );
+    },
   },
   {
     id: "actions",

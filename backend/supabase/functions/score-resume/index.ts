@@ -7,18 +7,39 @@ import {
   AllProvidersFailedError,
 } from "./orchestrator.ts";
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
+
 const orchestrator = new ScoringOrchestrator([
   new GeminiScorer(),
   new MistralScorer(),
 ]);
 
+function jsonResponse(body: unknown, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: {
+      ...corsHeaders,
+      "Content-Type": "application/json",
+    },
+  });
+}
+
 serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
+
   try {
     const { jobDescription, resumeText } = await req.json();
     if (!jobDescription || !resumeText) {
-      return new Response(
-        JSON.stringify({ error: "Missing jobDescription or resumeText" }),
-        { status: 400 },
+      return jsonResponse(
+        { error: "Missing jobDescription or resumeText" },
+        400,
       );
     }
 
@@ -27,21 +48,17 @@ serve(async (req) => {
       resumeText,
     );
 
-    return new Response(JSON.stringify({ ...result, attempts }), {
-      headers: { "Content-Type": "application/json" },
-    });
+    return jsonResponse({ ...result, attempts });
   } catch (err) {
     if (err instanceof AllProvidersFailedError) {
-      return new Response(
-        JSON.stringify({
+      return jsonResponse(
+        {
           error: "All providers failed",
           attempts: err.attempts,
-        }),
-        { status: 502 },
+        },
+        502,
       );
     }
-    return new Response(JSON.stringify({ error: String(err) }), {
-      status: 500,
-    });
+    return jsonResponse({ error: String(err) }, 500);
   }
 });

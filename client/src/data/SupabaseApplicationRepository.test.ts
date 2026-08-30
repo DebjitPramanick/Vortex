@@ -123,6 +123,9 @@ function createApplicationsBuilder(
         job_description: payload.job_description ?? null,
         job_type: payload.job_type ?? null,
         notes: payload.notes ?? null,
+        profile_id: payload.profile_id ?? null,
+        resume_score_id: payload.resume_score_id ?? null,
+        resume_score: payload.resume_score ?? null,
         applied_at: payload.applied_at ?? now,
         created_at: now,
         updated_at: now,
@@ -260,6 +263,22 @@ describe("SupabaseApplicationRepository", () => {
 
     const entries = await repo.getStatusHistory(created.id);
     expect(entries).toHaveLength(1);
+  });
+
+  it("persists profile and resume score fields", async () => {
+    const { client } = createMockClient();
+    const repo = new SupabaseApplicationRepository(client);
+    const created = await repo.create(sampleInput);
+
+    const updated = await repo.update(created.id, {
+      profile_id: "profile-1",
+      resume_score_id: "score-1",
+      resume_score: 82,
+    });
+
+    expect(updated.profile_id).toBe("profile-1");
+    expect(updated.resume_score_id).toBe("score-1");
+    expect(updated.resume_score).toBe(82);
   });
 
   it("deletes an application", async () => {
