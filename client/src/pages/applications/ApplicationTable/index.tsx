@@ -150,15 +150,15 @@ const COLUMNS: TableColumn<JobApplication>[] = [
       let icon = null;
       let variant: ChipVariant = "saved";
       if (row.resume_score) {
-        if (row.resume_score > 90) {
+        if (row.resume_score >= 90) {
           color = "text-vortex-success";
           icon = <FireIcon className="w-4 h-4" />;
           variant = "offer";
-        } else if (row.resume_score > 80 && row.resume_score < 90) {
+        } else if (row.resume_score >= 85 && row.resume_score < 90) {
           color = "text-vortex-warning";
           icon = <MoonIcon className="w-4 h-4" />;
           variant = "interview";
-        } else if (row.resume_score < 50) {
+        } else if (row.resume_score < 85) {
           color = "text-vortex-error";
           icon = <SadIcon className="w-4 h-4" />;
           variant = "rejected";

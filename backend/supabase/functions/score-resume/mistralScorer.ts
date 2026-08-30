@@ -6,7 +6,7 @@ const MISTRAL_API_KEY = Deno.env.get("MISTRAL_API_KEY")!;
 const MISTRAL_URL = "https://api.mistral.ai/v1/chat/completions";
 
 export class MistralScorer implements ResumeScorer {
-  readonly name = "mistral-large-latest";
+  readonly name = "mistral-small-latest";
 
   async score(
     jobDescription: string,
