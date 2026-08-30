@@ -36,7 +36,7 @@ export function Sidebar({ email, onSignOut }: SidebarProps) {
         </NavLink>
         <NavLink to="/dashboard" className="vx-nav-item vx-sidebar-link">
           <StatIcon aria-hidden="true" />
-          Dashboard
+          Reports
         </NavLink>
       </nav>
 
