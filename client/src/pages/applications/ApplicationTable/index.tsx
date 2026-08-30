@@ -1,13 +1,19 @@
 import { format, parseISO } from "date-fns";
 import { Chip } from "@components/molecules/chip";
 import type { ChipVariant } from "@components/molecules/chip";
-import { Table, type TableColumn, type TableViewState } from "@components/molecules/table";
+import {
+  Table,
+  type TableColumn,
+  type TableViewState,
+} from "@components/molecules/table";
 import type {
   JobApplication,
   JobType,
   Salary,
 } from "../../../types/application.ts";
 import { formatLocation } from "@utils/location.helper";
+import { Button } from "@components/atoms/button";
+import CopyIcon from "@icons/copy.svg";
 
 export type ApplicationTableProps = {
   applications: JobApplication[];
@@ -53,6 +59,15 @@ function formatDate(value: string): string {
   } catch {
     return value;
   }
+}
+
+function handleCopyJobUrl(
+  e: React.MouseEvent<HTMLButtonElement>,
+  row: JobApplication,
+) {
+  e.preventDefault();
+  e.stopPropagation();
+  navigator.clipboard.writeText(row.job_url);
 }
 
 const COLUMNS: TableColumn<JobApplication>[] = [
@@ -120,6 +135,23 @@ const COLUMNS: TableColumn<JobApplication>[] = [
     getFilterValue: (row) => formatDate(row.applied_at),
     render: (row) => (
       <span className="vx-meta">{formatDate(row.applied_at)}</span>
+    ),
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    filterable: false,
+    sortable: false,
+    render: (row) => (
+      <span className="vx-meta">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={(e) => handleCopyJobUrl(e, row)}
+        >
+          <CopyIcon className="w-4 h-4" />
+        </Button>
+      </span>
     ),
   },
 ];
