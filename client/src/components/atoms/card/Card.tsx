@@ -3,7 +3,7 @@ import { cx } from "../../cx.ts";
 import "./card.css";
 
 export type CardSize = "sm" | "md" | "lg";
-export type CardVariant = "default" | "muted";
+export type CardVariant = "default" | "muted" | "accent";
 
 export type CardProps = {
   size?: CardSize;
@@ -24,6 +24,7 @@ export function Card({
         "vx-card",
         `vx-card-${size}`,
         variant === "muted" && "vx-card-muted",
+        variant === "accent" && "vx-card-accent",
         className,
       )}
       {...props}

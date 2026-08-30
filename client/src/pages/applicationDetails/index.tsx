@@ -11,18 +11,14 @@ import {
 import { Button } from "@components/atoms/button";
 import { Detail } from "./Detail";
 import { EditApplicationPopup } from "./EditApplicationPopup";
+import { JobDescriptionCard } from "./JobDescriptionCard";
 import { ScoreProfileCard } from "./ScoreProfileCard";
 import { StatusSelect } from "./StatusSelect";
 import { useApplicationStore } from "@store/useApplicationStore";
-import type {
-  ApplicationStatus,
-  JobApplication,
-  Salary,
-} from "@app-types/application";
+import type { ApplicationStatus, Salary } from "@app-types/application";
 import { formatLocation } from "@utils/location.helper";
-import { fetchJobDetailsFromUrl } from "@utils/fetchJobDetailsFromUrl.helper";
 import EditIcon from "@icons/edit.svg";
-import FetchIcon from "@icons/fetch.svg";
+import ExternalLinkIcon from "@icons/external-link.svg";
 
 function formatSalary(salary: Salary | null): string {
   if (!salary) return "Not set";
@@ -48,159 +44,11 @@ function titleCase(value: string): string {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
-function JobDescriptionCard({
-  application,
-  onUpdate,
-}: {
-  application: JobApplication;
-  onUpdate: (
-    id: string,
-    changes: { job_description: string | null },
-  ) => Promise<unknown>;
-}) {
-  const [refetchingJd, setRefetchingJd] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [editingJd, setEditingJd] = useState(false);
-  const [jdDraft, setJdDraft] = useState("");
-  const [savingJd, setSavingJd] = useState(false);
-
-  function handleStartEditJd() {
-    setError(null);
-    setJdDraft(application.job_description ?? "");
-    setEditingJd(true);
-  }
-
-  function handleCancelEditJd() {
-    setEditingJd(false);
-    setJdDraft(application.job_description ?? "");
-  }
-
-  async function handleSaveJobDescription() {
-    setError(null);
-    setSavingJd(true);
-    try {
-      const jobDescription = jdDraft.trim() ? jdDraft : null;
-      await onUpdate(application.id, { job_description: jobDescription });
-      setEditingJd(false);
-    } catch (caught) {
-      setError(
-        caught instanceof Error
-          ? caught.message
-          : "Could not save the job description.",
-      );
-    } finally {
-      setSavingJd(false);
-    }
-  }
-
-  async function handleRefetchJobDescription() {
-    if (!application.job_url) {
-      setError("Add a job URL before refetching the description.");
-      return;
-    }
-
-    setError(null);
-    setRefetchingJd(true);
-    try {
-      const jobDetails = await fetchJobDetailsFromUrl(application.job_url);
-      await onUpdate(application.id, {
-        job_description: jobDetails.job_description,
-      });
-    } catch (caught) {
-      setError(
-        caught instanceof Error
-          ? caught.message
-          : "Could not refetch the job description.",
-      );
-    } finally {
-      setRefetchingJd(false);
-    }
-  }
-
+function MetaDot() {
   return (
-    <Card className="lg:col-span-2">
-      <CardHeader>
-        <div>
-          <CardTitle>Job Description</CardTitle>
-          <CardDescription>Job description and requirements</CardDescription>
-        </div>
-        <div className="flex items-center gap-2">
-          {editingJd ? (
-            <>
-              <Button
-                size="sm"
-                variant="ghost"
-                disabled={savingJd}
-                onClick={handleCancelEditJd}
-              >
-                Cancel
-              </Button>
-              <Button
-                size="sm"
-                variant="primary"
-                loading={savingJd}
-                onClick={() => void handleSaveJobDescription()}
-              >
-                Save
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button
-                size="sm"
-                variant="secondary"
-                icon={<EditIcon />}
-                onClick={handleStartEditJd}
-              >
-                Edit JD
-              </Button>
-              <Button
-                size="sm"
-                variant="secondary"
-                icon={<FetchIcon />}
-                loading={refetchingJd}
-                disabled={!application.job_url}
-                onClick={() => void handleRefetchJobDescription()}
-              >
-                Refetch JD
-              </Button>
-            </>
-          )}
-        </div>
-      </CardHeader>
-      <CardBody>
-        {error ? (
-          <p className="mb-3 text-[13px] text-vortex-error">{error}</p>
-        ) : null}
-        {editingJd ? (
-          <textarea
-            className="vx-input !h-auto min-h-64 font-[inherit] text-[13px] leading-5"
-            value={jdDraft}
-            onChange={(event) => setJdDraft(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === "Escape") {
-                event.preventDefault();
-                handleCancelEditJd();
-              }
-            }}
-            placeholder="Paste the job description from the listing…"
-            autoFocus
-            disabled={savingJd}
-            rows={16}
-            spellCheck={false}
-          />
-        ) : application.job_description?.trim() ? (
-          <p className="whitespace-pre-wrap text-[13px] text-vortex-fg">
-            {application.job_description}
-          </p>
-        ) : (
-          <p className="text-[13px] text-vortex-secondary">
-            No job description yet. Edit to paste one, or refetch from the
-            listing URL.
-          </p>
-        )}
-      </CardBody>
-    </Card>
+    <span className="mx-1.5 text-vortex-muted" aria-hidden="true">
+      ·
+    </span>
   );
 }
 
@@ -290,12 +138,30 @@ function ApplicationDetails() {
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
           <div className="min-w-0">
             <h1 className="vx-page-title">{selected.company}</h1>
-            <p className="mt-1 text-[13px] text-vortex-secondary">
+            <p className="mt-1 flex flex-wrap items-center text-[13px] text-vortex-secondary">
               {selected.role}
-              <span className="mx-1.5 text-vortex-muted" aria-hidden="true">
-                ·
-              </span>
+              <MetaDot />
               {formatLocation(selected.location)}
+              {selected.job_type ? (
+                <>
+                  <MetaDot />
+                  {titleCase(selected.job_type)}
+                </>
+              ) : null}
+              {selected.job_url ? (
+                <>
+                  <MetaDot />
+                  <a
+                    href={selected.job_url}
+                    className="inline-flex items-center text-vortex-secondary no-underline hover:text-vortex-primary"
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="Open job listing"
+                  >
+                    <ExternalLinkIcon className="h-3.5 w-3.5" aria-hidden />
+                  </a>
+                </>
+              ) : null}
             </p>
           </div>
           <StatusSelect
@@ -309,109 +175,90 @@ function ApplicationDetails() {
         ) : null}
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-3">
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <div>
-              <CardTitle>Details</CardTitle>
-              <CardDescription>Role metadata and notes</CardDescription>
-            </div>
-            <Button
-              size="sm"
-              variant="secondary"
-              icon={<EditIcon />}
-              onClick={() => setEditOpen(true)}
-            >
-              Edit
-            </Button>
-          </CardHeader>
-          <CardBody>
-            <dl className="grid gap-4 sm:grid-cols-2">
-              <Detail label="Application ID" value={selected.id} mono />
-              <Detail
-                label="Job type"
-                value={selected.job_type ? titleCase(selected.job_type) : "—"}
-              />
-              <Detail
-                label="Source"
-                value={selected.source ? titleCase(selected.source) : "—"}
-              />
-              <Detail
-                label="Salary"
-                value={formatSalary(selected.salary)}
-                mono
-              />
-              <Detail
-                label="Applied"
-                value={formatDate(selected.applied_at)}
-                mono
-              />
-              <Detail
-                label="Job URL"
-                value={
-                  selected.job_url ? (
-                    <a
-                      href={selected.job_url}
-                      className="text-vortex-primary no-underline hover:underline"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Open listing
-                    </a>
-                  ) : (
-                    "—"
-                  )
-                }
-              />
-              <Detail
-                label="Notes"
-                className="sm:col-span-2"
-                value={selected.notes?.trim() ? selected.notes : "—"}
-              />
-            </dl>
-          </CardBody>
-        </Card>
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
+        <div className="flex min-w-0 flex-1 flex-col gap-4">
+          <Card>
+            <CardHeader>
+              <div>
+                <CardTitle>Details</CardTitle>
+                <CardDescription>Role metadata and notes</CardDescription>
+              </div>
+              <Button
+                size="sm"
+                variant="secondary"
+                icon={<EditIcon />}
+                onClick={() => setEditOpen(true)}
+              >
+                Edit
+              </Button>
+            </CardHeader>
+            <CardBody>
+              <dl className="grid gap-4 sm:grid-cols-2">
+                <Detail
+                  label="Source"
+                  value={selected.source ? titleCase(selected.source) : "—"}
+                />
+                <Detail
+                  label="Salary"
+                  value={formatSalary(selected.salary)}
+                  mono
+                />
+                <Detail
+                  label="Applied on"
+                  value={formatDate(selected.applied_at)}
+                  mono
+                />
+                <Detail
+                  label="Notes"
+                  className="sm:col-span-2"
+                  value={selected.notes?.trim() ? selected.notes : "—"}
+                />
+              </dl>
+            </CardBody>
+          </Card>
+          <JobDescriptionCard
+            key={selected.id}
+            application={selected}
+            onUpdate={update}
+          />
+        </div>
 
-        <Card>
-          <CardHeader>
-            <div>
-              <CardTitle>Status history</CardTitle>
-              <CardDescription>Pipeline changes</CardDescription>
-            </div>
-          </CardHeader>
-          <CardBody>
-            {statusHistory.length === 0 ? (
-              <p className="text-[13px] text-vortex-secondary">
-                No status changes yet.
-              </p>
-            ) : (
-              <ol className="space-y-3">
-                {statusHistory.map((entry) => (
-                  <li key={entry.id} className="text-[13px]">
-                    <p className="font-medium text-vortex-fg">
-                      {entry.from_status ?? "—"} → {entry.to_status}
-                    </p>
-                    <p className="vx-meta mt-0.5">
-                      {formatDate(entry.changed_at)}
-                    </p>
-                  </li>
-                ))}
-              </ol>
-            )}
-          </CardBody>
-        </Card>
+        <div className="flex w-full shrink-0 flex-col gap-4 lg:w-104">
+          <ScoreProfileCard
+            key={`${selected.id}-score`}
+            application={selected}
+            onUpdate={update}
+          />
 
-        <JobDescriptionCard
-          key={selected.id}
-          application={selected}
-          onUpdate={update}
-        />
-
-        <ScoreProfileCard
-          key={`${selected.id}-score`}
-          application={selected}
-          onUpdate={update}
-        />
+          <Card>
+            <CardHeader>
+              <div>
+                <CardTitle>Status history</CardTitle>
+                <CardDescription>Pipeline changes</CardDescription>
+              </div>
+            </CardHeader>
+            <CardBody>
+              {statusHistory.length === 0 ? (
+                <p className="text-[13px] text-vortex-secondary">
+                  No status changes yet.
+                </p>
+              ) : (
+                <ol className="space-y-3">
+                  {statusHistory.map((entry) => (
+                    <li key={entry.id} className="text-[13px]">
+                      <p className="font-medium text-vortex-fg">
+                        {entry.from_status ?? "—"} → {entry.to_status}
+                      </p>
+                      <p className="vx-meta mt-0.5">
+                        {formatDate(entry.changed_at)}
+                      </p>
+                    </li>
+                  ))}
+                </ol>
+              )}
+            </CardBody>
+          </Card>
+        </div>
       </div>
 
       <EditApplicationPopup

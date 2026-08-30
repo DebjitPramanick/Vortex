@@ -13,6 +13,7 @@ import { useResumeScoreStore } from "@store/useResumeScoreStore";
 import type { JobApplication } from "@app-types/application";
 import type { ResumeScore } from "@app-types/resumeScore";
 import ResumeScorer from "../../../services/ai/resume-scorer";
+import ExternalLinkIcon from "@icons/external-link.svg";
 import TrophyIcon from "@icons/trophy.svg";
 
 type ScoreProfileCardProps = {
@@ -29,7 +30,7 @@ export function ScoreProfileCard({
   application,
   onUpdate,
 }: ScoreProfileCardProps) {
-  const { profiles, fetchAll } = useProfileStore();
+  const { profiles, fetchAll, getResumeUrl } = useProfileStore();
   const { create, fetchById } = useResumeScoreStore();
   const [profileId, setProfileId] = useState(application.profile_id ?? "");
   const [scoring, setScoring] = useState(false);
@@ -59,8 +60,8 @@ export function ScoreProfileCard({
   const selectedProfile = profiles.find((profile) => profile.id === profileId);
   const canScore = Boolean(
     profileId &&
-      selectedProfile?.resume_text?.trim() &&
-      application.job_description?.trim(),
+    selectedProfile?.resume_text?.trim() &&
+    application.job_description?.trim(),
   );
 
   async function handleScore() {
@@ -72,7 +73,10 @@ export function ScoreProfileCard({
     setError(null);
     setScoring(true);
     try {
-      const result = await new ResumeScorer(selectedProfile, application).score();
+      const result = await new ResumeScorer(
+        selectedProfile,
+        application,
+      ).score();
       const saved = await create({
         application_id: application.id,
         score: result.score,
@@ -90,15 +94,31 @@ export function ScoreProfileCard({
       setLatestScore(saved);
     } catch (caught) {
       setError(
-        caught instanceof Error ? caught.message : "Could not score this profile.",
+        caught instanceof Error
+          ? caught.message
+          : "Could not score this profile.",
       );
     } finally {
       setScoring(false);
     }
   }
 
+  async function handleOpenResume() {
+    if (!selectedProfile?.resume_path) return;
+
+    setError(null);
+    try {
+      const url = await getResumeUrl(selectedProfile.resume_path);
+      window.open(url, "_blank", "noopener,noreferrer");
+    } catch (caught) {
+      setError(
+        caught instanceof Error ? caught.message : "Could not open resume.",
+      );
+    }
+  }
+
   return (
-    <Card className="lg:col-span-1">
+    <Card variant="accent">
       <CardHeader>
         <div>
           <CardTitle>Resume score</CardTitle>
@@ -146,16 +166,28 @@ export function ScoreProfileCard({
             </p>
           ) : null}
 
-          <Button
-            size="sm"
-            variant="primary"
-            icon={<TrophyIcon />}
-            loading={scoring}
-            disabled={!canScore}
-            onClick={() => void handleScore()}
-          >
-            Score profile
-          </Button>
+          <div className="flex flex-wrap items-center gap-2">
+            {selectedProfile ? (
+              <Button
+                variant="secondary"
+                className="flex-1"
+                icon={<ExternalLinkIcon />}
+                onClick={() => void handleOpenResume()}
+              >
+                View Profile
+              </Button>
+            ) : null}
+            <Button
+              variant="primary"
+              className="flex-1"
+              icon={<TrophyIcon />}
+              loading={scoring}
+              disabled={!canScore}
+              onClick={() => void handleScore()}
+            >
+              Score profile
+            </Button>
+          </div>
 
           {error ? (
             <p className="text-[13px] text-vortex-error">{error}</p>
@@ -177,9 +209,9 @@ export function ScoreProfileCard({
                   {latestScore.summary}
                 </p>
               ) : null}
-              {latestScore?.model ? (
+              {/* {latestScore?.model ? (
                 <p className="vx-meta mt-2">{latestScore.model}</p>
-              ) : null}
+              ) : null} */}
             </div>
           ) : null}
         </div>
