@@ -5,7 +5,8 @@ import { NewProfilePopup } from "./NewProfilePopup";
 import { ProfileGrid } from "./ProfileGrid";
 
 function Profiles() {
-  const { profiles, loading, error, fetchAll, getResumeUrl } = useProfileStore();
+  const { profiles, loading, error, fetchAll, getResumeUrl } =
+    useProfileStore();
   const [createOpen, setCreateOpen] = useState(false);
   const [openError, setOpenError] = useState<string | null>(null);
 
@@ -39,6 +40,7 @@ function Profiles() {
         <Button
           type="button"
           variant="primary"
+          size="lg"
           onClick={() => setCreateOpen(true)}
         >
           New profile
