@@ -2,6 +2,7 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { GeminiScorer } from "./geminiScorer.ts";
 import { MistralScorer } from "./mistralScorer.ts";
+import { RetryingScorer } from "./retryingScorer.ts";
 import {
   ScoringOrchestrator,
   AllProvidersFailedError,
@@ -15,8 +16,8 @@ const corsHeaders = {
 };
 
 const orchestrator = new ScoringOrchestrator([
-  new GeminiScorer(),
-  new MistralScorer(),
+  new RetryingScorer(new GeminiScorer()),
+  new RetryingScorer(new MistralScorer()),
 ]);
 
 function jsonResponse(body: unknown, status = 200) {
