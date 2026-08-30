@@ -1,0 +1,19 @@
+.vx-skeleton {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-vortex-border);
+}
+
+.vx-skeleton-shimmer {
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%) skewX(16deg);
+    animation: shimmer 1.5s infinite;
+    background: linear-gradient(to right, transparent, var(--color-vortex-bg), transparent);
+}
+
+@keyframes shimmer {
+    100% {
+        transform: translateX(100%) skewX(16deg);
+    }
+}
