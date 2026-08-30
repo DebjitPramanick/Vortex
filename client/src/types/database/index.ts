@@ -1,4 +1,11 @@
-import type { ApplicationStatus, Currency, JobType, Location, Salary, Source } from "./application.ts";
+import type {
+  ApplicationStatus,
+  Currency,
+  JobType,
+  Location,
+  Salary,
+  Source,
+} from "../application";
 
 export type Json =
   | string

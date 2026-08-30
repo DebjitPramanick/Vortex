@@ -1,10 +1,6 @@
 import { create } from "zustand";
 import { profileRepository } from "../data/defaultProfileRepository.ts";
-import type {
-  NewProfile,
-  Profile,
-  ProfileRepository,
-} from "../types/profile.ts";
+import type { NewProfile, Profile, ProfileRepository } from "@app-types";
 
 type ProfileStore = {
   profiles: Profile[];

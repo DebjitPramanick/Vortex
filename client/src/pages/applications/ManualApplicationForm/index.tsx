@@ -10,7 +10,7 @@ import {
   CURRENCIES,
   JOB_TYPES,
   SOURCES,
-} from "@utils/fetchJobDetailsFromUrl.helper";
+} from "@utils/jobDetailsExtractor";
 import { formatLocation } from "@utils/location.helper";
 import "./index.css";
 
@@ -29,18 +29,16 @@ const schema = z.object({
     .refine((value) => value !== null, {
       message: "Select a location from the list",
     }),
-  job_url: z
-    .string()
-    .refine((value) => {
-      const trimmed = value.trim();
-      if (trimmed === "") return true;
-      try {
-        new URL(trimmed);
-        return true;
-      } catch {
-        return false;
-      }
-    }, "Enter a valid job URL"),
+  job_url: z.string().refine((value) => {
+    const trimmed = value.trim();
+    if (trimmed === "") return true;
+    try {
+      new URL(trimmed);
+      return true;
+    } catch {
+      return false;
+    }
+  }, "Enter a valid job URL"),
   applied_at: z.string().min(1, "Applied date is required"),
   status: z.enum(APPLICATION_STATUSES),
   salary_amount: z

@@ -1,12 +1,5 @@
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
-import { chartColor } from "@utils/charts.helper";
+import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis } from "recharts";
+import { chartColor } from "@services/chart-data-processor";
 import "./bar.css";
 
 export type BarChartDatum = Record<string, string | number | null | undefined>;
@@ -87,9 +80,7 @@ export default function VxBarChart({
           content={({ active, payload }) => (
             <BarTooltip
               active={active}
-              payload={
-                payload as unknown as BarTooltipProps["payload"]
-              }
+              payload={payload as unknown as BarTooltipProps["payload"]}
               nameKey={nameKey}
             />
           )}

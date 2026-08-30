@@ -1,5 +1,5 @@
 import { fetchLocation } from "./location.helper.ts";
-import type { JobType, NewApplication } from "../types/application";
+import type { JobType, NewApplication } from "@app-types";
 import * as cheerio from "cheerio";
 
 export type FetchedJobDetails = Pick<

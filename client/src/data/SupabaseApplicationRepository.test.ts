@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { SupabaseApplicationRepository } from "./SupabaseApplicationRepository.ts";
-import type { JobApplication, NewApplication, StatusHistoryEntry } from "../types/application.ts";
-import type { Database } from "../types/database.ts";
+import type {
+  JobApplication,
+  NewApplication,
+  StatusHistoryEntry,
+  Database,
+} from "@app-types";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 type AppRow = JobApplication;
@@ -139,7 +143,11 @@ function createApplicationsBuilder(
       if (!current) {
         return { data: null, error: { message: "Not found" } };
       }
-      const updated = { ...current, ...payload, updated_at: "2026-08-29T01:00:00.000Z" };
+      const updated = {
+        ...current,
+        ...payload,
+        updated_at: "2026-08-29T01:00:00.000Z",
+      };
       apps.set(filters.id, updated);
       return { data: mode === "many" ? [updated] : updated, error: null };
     }

@@ -6,11 +6,7 @@ import {
   type TableColumn,
   type TableViewState,
 } from "@components/molecules/table";
-import type {
-  JobApplication,
-  JobType,
-  Salary,
-} from "../../../types/application.ts";
+import type { JobApplication, JobType, Salary } from "@app-types";
 import { formatLocation } from "@utils/location.helper";
 import { Button } from "@components/atoms/button";
 import CopyIcon from "@icons/copy.svg";

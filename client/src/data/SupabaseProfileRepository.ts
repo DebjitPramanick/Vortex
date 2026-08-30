@@ -3,8 +3,8 @@ import type {
   NewProfile,
   Profile,
   ProfileRepository,
-} from "../types/profile.ts";
-import type { Database } from "../types/database.ts";
+  Database,
+} from "@app-types";
 
 export const RESUMES_BUCKET = "resumes";
 const MAX_RESUME_BYTES = 10 * 1024 * 1024;

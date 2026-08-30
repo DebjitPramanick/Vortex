@@ -21,8 +21,10 @@
       "@pages/*": ["./src/pages/*"],
       "@store/*": ["./src/store/*"],
       "@app-types/*": ["./src/types/*"],
-      "@icons": ["./src/icons/index.tsx"],
-      "@icons/*": ["./src/icons/*"]
+      "@icons/*": ["./src/icons/*"],
+      "@services/*": ["./src/services/*"],
+      "@app-types": ["./src/types"],
+      "@constants": ["./src/constants"]
     },
 
     /* Linting */

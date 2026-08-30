@@ -3,8 +3,8 @@ import type {
   NewResumeScore,
   ResumeScore,
   ResumeScoreRepository,
-} from "../types/resumeScore.ts";
-import type { Database } from "../types/database.ts";
+  Database,
+} from "@app-types";
 
 type ResumeScoreUpdate =
   Database["public"]["Tables"]["resume_scores"]["Update"];

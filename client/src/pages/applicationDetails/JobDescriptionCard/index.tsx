@@ -8,7 +8,7 @@ import {
 } from "@components/atoms/card";
 import { Button } from "@components/atoms/button";
 import type { JobApplication } from "@app-types/application";
-import { fetchJobDetailsFromUrl } from "@utils/fetchJobDetailsFromUrl.helper";
+import { fetchJobDetailsFromUrl } from "@utils/jobDetailsExtractor";
 import EditIcon from "@icons/edit.svg";
 import FetchIcon from "@icons/fetch.svg";
 

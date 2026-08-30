@@ -1,47 +1,18 @@
+import { formatLocation } from "@utils/location.helper";
 import { eachDayOfInterval, format, parseISO, subDays } from "date-fns";
-import type { ApplicationStatus, JobApplication } from "@app-types/application";
 import type {
-  ApplicationCountByDay,
+  JobApplication,
   ApplicationCountByLocation,
   ApplicationCountByStatus,
-} from "@app-types/chart.type";
-import { APPLICATION_STATUSES } from "./fetchJobDetailsFromUrl.helper";
-import { formatLocation } from "./location.helper";
-
-const STATUS_LABEL: Record<ApplicationStatus, string> = {
-  saved: "Saved",
-  applied: "Applied",
-  screening: "Screening",
-  interview: "Interview",
-  offer: "Offer",
-  rejected: "Rejected",
-  withdrawn: "Withdrawn",
-};
-
-const STATUS_CHART_COLOR: Record<ApplicationStatus, string> = {
-  saved: "#475569",
-  applied: "#4f46e5",
-  screening: "#0891b2",
-  interview: "#7c3aed",
-  offer: "#059669",
-  rejected: "#e11d48",
-  withdrawn: "#d97706",
-};
-
-const THEME_CHART_COLORS = [
-  "#4f46e5",
-  "#0891b2",
-  "#7c3aed",
-  "#059669",
-  "#d97706",
-  "#e11d48",
-  "#4338ca",
-  "#0e7490",
-  "#6366f1",
-  "#14b8a6",
-  "#a855f7",
-  "#fb7185",
-];
+  ApplicationCountByDay,
+  ApplicationStatus,
+} from "@app-types";
+import {
+  APPLICATION_STATUSES,
+  STATUS_CHART_COLOR,
+  STATUS_LABEL,
+  THEME_CHART_COLORS,
+} from "@constants";
 
 export function chartColor(index: number): string {
   const base = THEME_CHART_COLORS[index % THEME_CHART_COLORS.length];
@@ -62,7 +33,22 @@ function shiftHex(hex: string, amount: number): string {
   return `#${[r, g, b].map((channel) => channel.toString(16).padStart(2, "0")).join("")}`;
 }
 
-export class ChartHelper {
+function appliedDayKey(appliedAt: string): string {
+  const dateOnly = appliedAt.slice(0, 10);
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateOnly)) return dateOnly;
+  return format(parseISO(appliedAt), "yyyy-MM-dd");
+}
+
+function parseLocalDay(key: string): Date {
+  const [year, month, day] = key.split("-").map(Number);
+  return new Date(year, month - 1, day);
+}
+
+function startOfLocalDay(value: Date): Date {
+  return new Date(value.getFullYear(), value.getMonth(), value.getDate());
+}
+
+export class ChartDataProcessor {
   private applications: JobApplication[];
   private applicationsByLocation: Record<string, JobApplication[]>;
 
@@ -166,19 +152,4 @@ export class ChartHelper {
       [],
     );
   }
-}
-
-function appliedDayKey(appliedAt: string): string {
-  const dateOnly = appliedAt.slice(0, 10);
-  if (/^\d{4}-\d{2}-\d{2}$/.test(dateOnly)) return dateOnly;
-  return format(parseISO(appliedAt), "yyyy-MM-dd");
-}
-
-function parseLocalDay(key: string): Date {
-  const [year, month, day] = key.split("-").map(Number);
-  return new Date(year, month - 1, day);
-}
-
-function startOfLocalDay(value: Date): Date {
-  return new Date(value.getFullYear(), value.getMonth(), value.getDate());
 }

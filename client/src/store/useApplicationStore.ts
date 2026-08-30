@@ -5,7 +5,7 @@ import type {
   JobApplication,
   NewApplication,
   StatusHistoryEntry,
-} from "../types/application.ts";
+} from "@app-types";
 
 type ApplicationStore = {
   applications: JobApplication[];
@@ -117,7 +117,9 @@ export function createApplicationStore(repository: ApplicationRepository) {
   }));
 }
 
-export const useApplicationStore = createApplicationStore(applicationRepository);
+export const useApplicationStore = createApplicationStore(
+  applicationRepository,
+);
 
 function toMessage(error: unknown): string {
   return error instanceof Error ? error.message : "Unexpected error";

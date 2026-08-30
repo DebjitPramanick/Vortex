@@ -27,6 +27,8 @@ export default defineConfig({
       "@store": path.resolve(rootDir, "src/store"),
       "@app-types": path.resolve(rootDir, "src/types"),
       "@icons": path.resolve(rootDir, "src/icons"),
+      "@services": path.resolve(rootDir, "src/services"),
+      "@constants": path.resolve(rootDir, "src/constants"),
     },
   },
   test: {

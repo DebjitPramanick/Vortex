@@ -12,7 +12,7 @@ import { Button } from "@components/atoms/button";
 import type { Profile } from "@app-types/profile";
 import "./index.css";
 import TextSearchIcon from "@icons/text-search.svg";
-import ResumeParser from "../../../services/resume/resume-parser";
+import ResumeParser from "@services/resume-parser";
 import { useProfileStore } from "@store/useProfileStore";
 import { Chip } from "@components/molecules/chip";
 

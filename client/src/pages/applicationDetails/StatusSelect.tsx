@@ -1,5 +1,5 @@
 import type { ApplicationStatus } from "@app-types/application";
-import { APPLICATION_STATUSES } from "@utils/fetchJobDetailsFromUrl.helper";
+import { APPLICATION_STATUSES } from "@constants";
 import { SplitButton } from "@components/molecules/split-button";
 
 const STATUS_LABEL: Record<ApplicationStatus, string> = {

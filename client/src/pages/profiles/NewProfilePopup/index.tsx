@@ -4,7 +4,7 @@ import { Modal } from "@components/molecules/modal";
 import { useProfileStore } from "@store/useProfileStore";
 import type { Profile } from "@app-types/profile";
 import "./index.css";
-import ResumeParser from "../../../services/resume/resume-parser";
+import ResumeParser from "@services/resume-parser";
 
 export type NewProfilePopupProps = {
   open: boolean;

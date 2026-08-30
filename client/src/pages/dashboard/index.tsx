@@ -8,7 +8,7 @@ import {
 import VxBarChart from "@components/charts/bar";
 import VxPieChart from "@components/charts/pie";
 import { useApplicationStore } from "@store/useApplicationStore";
-import { ChartHelper } from "@utils/charts.helper";
+import { ChartDataProcessor } from "@services/chart-data-processor";
 import { useEffect, useMemo } from "react";
 
 function Dashboard() {
@@ -24,13 +24,15 @@ function Dashboard() {
     applicationsInLast30Days,
     nApplicationsByResumeScore,
   } = useMemo(() => {
-    const chartHelper = new ChartHelper(applications);
+    const chartDataProcessor = new ChartDataProcessor(applications);
     return {
-      nApplicationsByLocation: chartHelper.numberOfApplicationsByLocation(),
-      nApplicationsByStatus: chartHelper.numberOfApplicationsByStatus(),
-      applicationsInLast30Days: chartHelper.numberOfApplicationsByDay(30),
+      nApplicationsByLocation:
+        chartDataProcessor.numberOfApplicationsByLocation(),
+      nApplicationsByStatus: chartDataProcessor.numberOfApplicationsByStatus(),
+      applicationsInLast30Days:
+        chartDataProcessor.numberOfApplicationsByDay(30),
       nApplicationsByResumeScore:
-        chartHelper.numberOfApplicationsByResumeScore(),
+        chartDataProcessor.numberOfApplicationsByResumeScore(),
     };
   }, [applications]);
 

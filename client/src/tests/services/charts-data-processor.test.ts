@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { JobApplication } from "@app-types/application";
-import { ChartHelper, chartColor } from "./charts.helper.ts";
+import { ChartDataProcessor, chartColor } from "@services/chart-data-processor";
 
 describe("chartColor", () => {
   it("returns distinct theme colors for the first several slices", () => {
@@ -17,7 +17,7 @@ describe("numberOfApplicationsByDay", () => {
   const now = new Date(2026, 7, 29, 18, 0, 0);
 
   it("returns one row per day including zeros", () => {
-    const helper = new ChartHelper([
+    const helper = new ChartDataProcessor([
       applicationOn("2026-08-29"),
       applicationOn("2026-08-29"),
       applicationOn("2026-08-27"),
@@ -38,7 +38,7 @@ describe("numberOfApplicationsByDay", () => {
 
 describe("numberOfApplicationsByStatus", () => {
   it("groups counts with pipeline labels and omits empty stages", () => {
-    const helper = new ChartHelper([
+    const helper = new ChartDataProcessor([
       applicationOn("2026-08-29", "applied"),
       applicationOn("2026-08-28", "applied"),
       applicationOn("2026-08-27", "rejected"),

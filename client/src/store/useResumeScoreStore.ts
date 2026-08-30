@@ -4,7 +4,7 @@ import type {
   NewResumeScore,
   ResumeScore,
   ResumeScoreRepository,
-} from "../types/resumeScore.ts";
+} from "@app-types";
 
 type ResumeScoreStore = {
   scores: ResumeScore[];
@@ -112,7 +112,9 @@ export function createResumeScoreStore(repository: ResumeScoreRepository) {
   }));
 }
 
-export const useResumeScoreStore = createResumeScoreStore(resumeScoreRepository);
+export const useResumeScoreStore = createResumeScoreStore(
+  resumeScoreRepository,
+);
 
 function toMessage(error: unknown): string {
   return error instanceof Error ? error.message : "Unexpected error";

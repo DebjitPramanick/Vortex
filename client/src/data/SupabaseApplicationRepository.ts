@@ -4,8 +4,8 @@ import type {
   JobApplication,
   NewApplication,
   StatusHistoryEntry,
-} from "../types/application.ts";
-import type { Database } from "../types/database.ts";
+  Database,
+} from "@app-types";
 
 type ApplicationUpdate =
   Database["public"]["Tables"]["job_applications"]["Update"];
