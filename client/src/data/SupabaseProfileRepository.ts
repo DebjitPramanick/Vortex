@@ -98,6 +98,7 @@ export class SupabaseProfileRepository implements ProfileRepository {
         notes: input.notes?.trim() ? input.notes.trim() : null,
         resume_path: resumePath,
         resume_file_name: fileName,
+        resume_text: input.resume_text?.trim() ? input.resume_text : null,
       })
       .select("*")
       .single();
@@ -113,11 +114,14 @@ export class SupabaseProfileRepository implements ProfileRepository {
 
   async update(
     id: string,
-    changes: Partial<Pick<Profile, "name" | "notes">>,
+    changes: Partial<Pick<Profile, "name" | "notes" | "resume_text">>,
   ): Promise<Profile> {
     const payload: ProfileUpdate = {};
     if (changes.name !== undefined) payload.name = changes.name;
     if (changes.notes !== undefined) payload.notes = changes.notes;
+    if (changes.resume_text !== undefined) {
+      payload.resume_text = changes.resume_text;
+    }
 
     const { data, error } = await this.client
       .from("profiles")

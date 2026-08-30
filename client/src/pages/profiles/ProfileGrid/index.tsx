@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { format, parseISO } from "date-fns";
 import {
   Card,
@@ -11,6 +11,10 @@ import {
 import { Button } from "@components/atoms/button";
 import type { Profile } from "@app-types/profile";
 import "./index.css";
+import TextSearchIcon from "@icons/text-search.svg";
+import ResumeParser from "../../../services/resume/resume-parser";
+import { useProfileStore } from "@store/useProfileStore";
+import { Chip } from "@components/molecules/chip";
 
 export type ProfileGridProps = {
   profiles: Profile[];
@@ -38,12 +42,34 @@ export function ProfileGrid({
   loading,
   onOpenResume,
 }: ProfileGridProps) {
+  const { getResumeUrl, update } = useProfileStore();
   const [query, setQuery] = useState("");
   const normalizedQuery = query.trim().toLowerCase();
 
   const visible = useMemo(
     () => profiles.filter((profile) => matchesQuery(profile, normalizedQuery)),
     [profiles, normalizedQuery],
+  );
+
+  const handleParseResume = useCallback(
+    async (event: React.MouseEvent<HTMLButtonElement>, profile: Profile) => {
+      event.stopPropagation();
+      event.preventDefault();
+      try {
+        const resumeUrl = await getResumeUrl(profile.resume_path);
+        const result = await fetch(resumeUrl);
+        const blob = await result.blob();
+        const resumeFile = new File([blob], profile.resume_file_name);
+        const parser = new ResumeParser(resumeFile);
+        const resumeText = await parser.parse();
+        await update(profile.id, {
+          resume_text: resumeText,
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [getResumeUrl, update],
   );
 
   return (
@@ -90,6 +116,14 @@ export function ProfileGrid({
                     Created {formatDate(profile.created_at)}
                   </CardDescription>
                 </div>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="secondary"
+                  onClick={(e) => handleParseResume(e, profile)}
+                >
+                  <TextSearchIcon />
+                </Button>
               </CardHeader>
               <CardBody>
                 <p className="vx-profile-card-notes">
@@ -97,17 +131,12 @@ export function ProfileGrid({
                 </p>
               </CardBody>
               <CardFooter>
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="secondary"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    onOpenResume?.(profile);
-                  }}
-                >
+                <Chip size="sm" variant="applied">
                   {profile.resume_file_name}
-                </Button>
+                </Chip>
+                <Chip size="sm" variant="offer">
+                  {profile.resume_text ? "Parsed" : "Not parsed"}
+                </Chip>
               </CardFooter>
             </Card>
           ))}

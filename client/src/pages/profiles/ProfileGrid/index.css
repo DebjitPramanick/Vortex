@@ -15,7 +15,7 @@
 
 .vx-profile-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(16.5rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   align-content: start;
   gap: 1rem;
   min-height: 0;

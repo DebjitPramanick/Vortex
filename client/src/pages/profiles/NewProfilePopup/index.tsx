@@ -4,6 +4,7 @@ import { Modal } from "@components/molecules/modal";
 import { useProfileStore } from "@store/useProfileStore";
 import type { Profile } from "@app-types/profile";
 import "./index.css";
+import ResumeParser from "../../../services/resume/resume-parser";
 
 export type NewProfilePopupProps = {
   open: boolean;
@@ -48,11 +49,14 @@ export function NewProfilePopup({
 
     setSubmitError(null);
     setSubmitting(true);
+    const parser = new ResumeParser(resume);
     try {
+      const resumeText = await parser.parse();
       const created = await create({
         name: trimmedName,
         notes: notes.trim() ? notes : null,
         resume,
+        resume_text: resumeText,
       });
       onClose();
       onCreated?.(created);
@@ -94,7 +98,9 @@ export function NewProfilePopup({
       }
     >
       <form id={FORM_ID} className="vx-profile-form" onSubmit={handleSubmit}>
-        {submitError ? <p className="vx-profile-banner">{submitError}</p> : null}
+        {submitError ? (
+          <p className="vx-profile-banner">{submitError}</p>
+        ) : null}
 
         <label className="vx-profile-field">
           <span className="vx-profile-label">Name</span>

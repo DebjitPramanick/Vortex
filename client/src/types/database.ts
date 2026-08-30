@@ -99,6 +99,7 @@ export type Database = {
           notes: string | null;
           resume_path: string;
           resume_file_name: string;
+          resume_text: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -109,6 +110,7 @@ export type Database = {
           notes?: string | null;
           resume_path: string;
           resume_file_name: string;
+          resume_text?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -117,9 +119,50 @@ export type Database = {
           notes?: string | null;
           resume_path?: string;
           resume_file_name?: string;
+          resume_text?: string | null;
           updated_at?: string;
         };
         Relationships: [];
+      };
+      resume_scores: {
+        Row: {
+          id: string;
+          application_id: string | null;
+          score: number;
+          matched_skills: string[];
+          missing_skills: string[];
+          summary: string;
+          model: string;
+          created_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          application_id?: string | null;
+          score: number;
+          matched_skills: string[];
+          missing_skills: string[];
+          summary: string;
+          model: string;
+          created_at?: string | null;
+        };
+        Update: {
+          application_id?: string | null;
+          score?: number;
+          matched_skills?: string[];
+          missing_skills?: string[];
+          summary?: string;
+          model?: string;
+          created_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "resume_scores_application_id_fkey";
+            columns: ["application_id"];
+            isOneToOne: false;
+            referencedRelation: "job_applications";
+            referencedColumns: ["id"];
+          },
+        ];
       };
     };
     Views: {

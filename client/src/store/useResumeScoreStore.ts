@@ -1,30 +1,30 @@
 import { create } from "zustand";
-import { profileRepository } from "../data/defaultProfileRepository.ts";
+import { resumeScoreRepository } from "../data/defaultResumeScoreRepository.ts";
 import type {
-  NewProfile,
-  Profile,
-  ProfileRepository,
-} from "../types/profile.ts";
+  NewResumeScore,
+  ResumeScore,
+  ResumeScoreRepository,
+} from "../types/resumeScore.ts";
 
-type ProfileStore = {
-  profiles: Profile[];
-  selected: Profile | null;
+type ResumeScoreStore = {
+  scores: ResumeScore[];
+  selected: ResumeScore | null;
   loading: boolean;
   error: string | null;
   fetchAll: () => Promise<void>;
-  fetchById: (id: string) => Promise<Profile | null>;
-  create: (input: NewProfile) => Promise<Profile>;
+  fetchById: (id: string) => Promise<ResumeScore | null>;
+  fetchByApplicationId: (applicationId: string) => Promise<ResumeScore[]>;
+  create: (input: NewResumeScore) => Promise<ResumeScore>;
   update: (
     id: string,
-    changes: Partial<Pick<Profile, "name" | "notes" | "resume_text">>,
-  ) => Promise<Profile>;
+    changes: Partial<Omit<ResumeScore, "id" | "created_at">>,
+  ) => Promise<ResumeScore>;
   remove: (id: string) => Promise<void>;
-  getResumeUrl: (path: string) => Promise<string>;
 };
 
-export function createProfileStore(repository: ProfileRepository) {
-  return create<ProfileStore>((set, get) => ({
-    profiles: [],
+export function createResumeScoreStore(repository: ResumeScoreRepository) {
+  return create<ResumeScoreStore>((set, get) => ({
+    scores: [],
     selected: null,
     loading: false,
     error: null,
@@ -32,8 +32,8 @@ export function createProfileStore(repository: ProfileRepository) {
     fetchAll: async () => {
       set({ loading: true, error: null });
       try {
-        const profiles = await repository.getAll();
-        set({ profiles, loading: false });
+        const scores = await repository.getAll();
+        set({ scores, loading: false });
       } catch (error) {
         set({ loading: false, error: toMessage(error) });
         throw error;
@@ -52,12 +52,24 @@ export function createProfileStore(repository: ProfileRepository) {
       }
     },
 
+    fetchByApplicationId: async (applicationId) => {
+      set({ loading: true, error: null });
+      try {
+        const scores = await repository.getByApplicationId(applicationId);
+        set({ scores, loading: false });
+        return scores;
+      } catch (error) {
+        set({ loading: false, error: toMessage(error) });
+        throw error;
+      }
+    },
+
     create: async (input) => {
       set({ loading: true, error: null });
       try {
         const created = await repository.create(input);
         set({
-          profiles: [created, ...get().profiles],
+          scores: [created, ...get().scores],
           loading: false,
         });
         return created;
@@ -72,9 +84,7 @@ export function createProfileStore(repository: ProfileRepository) {
       try {
         const updated = await repository.update(id, changes);
         set({
-          profiles: get().profiles.map((row) =>
-            row.id === id ? updated : row,
-          ),
+          scores: get().scores.map((row) => (row.id === id ? updated : row)),
           selected: get().selected?.id === id ? updated : get().selected,
           loading: false,
         });
@@ -90,7 +100,7 @@ export function createProfileStore(repository: ProfileRepository) {
       try {
         await repository.remove(id);
         set({
-          profiles: get().profiles.filter((row) => row.id !== id),
+          scores: get().scores.filter((row) => row.id !== id),
           selected: get().selected?.id === id ? null : get().selected,
           loading: false,
         });
@@ -99,14 +109,10 @@ export function createProfileStore(repository: ProfileRepository) {
         throw error;
       }
     },
-
-    getResumeUrl: async (path) => {
-      return repository.getResumeUrl(path);
-    },
   }));
 }
 
-export const useProfileStore = createProfileStore(profileRepository);
+export const useResumeScoreStore = createResumeScoreStore(resumeScoreRepository);
 
 function toMessage(error: unknown): string {
   return error instanceof Error ? error.message : "Unexpected error";
