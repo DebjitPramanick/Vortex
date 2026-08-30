@@ -18,15 +18,21 @@ function Dashboard() {
     void fetchAll().catch(() => undefined);
   }, [fetchAll]);
 
-  const { nApplicationsByLocation, nApplicationsByStatus, applicationsInLast30Days } =
-    useMemo(() => {
-      const chartHelper = new ChartHelper(applications);
-      return {
-        nApplicationsByLocation: chartHelper.numberOfApplicationsByLocation(),
-        nApplicationsByStatus: chartHelper.numberOfApplicationsByStatus(),
-        applicationsInLast30Days: chartHelper.numberOfApplicationsByDay(30),
-      };
-    }, [applications]);
+  const {
+    nApplicationsByLocation,
+    nApplicationsByStatus,
+    applicationsInLast30Days,
+    nApplicationsByResumeScore,
+  } = useMemo(() => {
+    const chartHelper = new ChartHelper(applications);
+    return {
+      nApplicationsByLocation: chartHelper.numberOfApplicationsByLocation(),
+      nApplicationsByStatus: chartHelper.numberOfApplicationsByStatus(),
+      applicationsInLast30Days: chartHelper.numberOfApplicationsByDay(30),
+      nApplicationsByResumeScore:
+        chartHelper.numberOfApplicationsByResumeScore(),
+    };
+  }, [applications]);
 
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto">
@@ -85,6 +91,30 @@ function Dashboard() {
                 data={nApplicationsByStatus}
                 nameKey="statusLabel"
                 dataKey="count"
+              />
+            )}
+          </CardBody>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <div>
+              <CardTitle>Applications by resume score</CardTitle>
+              <CardDescription>
+                Count of roles grouped by resume score.
+              </CardDescription>
+            </div>
+          </CardHeader>
+          <CardBody>
+            {loading ? (
+              <p className="text-[13px] text-vortex-secondary">
+                Loading chart…
+              </p>
+            ) : (
+              <VxPieChart
+                data={nApplicationsByResumeScore}
+                nameKey="label"
+                dataKey="value"
               />
             )}
           </CardBody>

@@ -53,7 +53,10 @@ export function chartColor(index: number): string {
 function shiftHex(hex: string, amount: number): string {
   const value = hex.replace("#", "");
   const num = Number.parseInt(value, 16);
-  const r = Math.min(255, Math.max(0, ((num >> 16) & 255) + (amount % 40) - 12));
+  const r = Math.min(
+    255,
+    Math.max(0, ((num >> 16) & 255) + (amount % 40) - 12),
+  );
   const g = Math.min(255, Math.max(0, ((num >> 8) & 255) - (amount % 28)));
   const b = Math.min(255, Math.max(0, (num & 255) + (amount % 36)));
   return `#${[r, g, b].map((channel) => channel.toString(16).padStart(2, "0")).join("")}`;
@@ -101,12 +104,11 @@ export class ChartHelper {
     return APPLICATION_STATUSES.filter(
       (status) => (counts.get(status) ?? 0) > 0,
     ).map((status) => ({
-        status,
-        statusLabel: STATUS_LABEL[status],
-        count: counts.get(status) ?? 0,
-        fill: STATUS_CHART_COLOR[status],
-      }),
-    );
+      status,
+      statusLabel: STATUS_LABEL[status],
+      count: counts.get(status) ?? 0,
+      fill: STATUS_CHART_COLOR[status],
+    }));
   }
 
   public numberOfApplicationsByDay(
@@ -133,6 +135,36 @@ export class ChartHelper {
         count: counts.get(date) ?? 0,
       };
     });
+  }
+  public numberOfApplicationsByResumeScore(): {
+    label: string;
+    value: number;
+  }[] {
+    const counts = {
+      ">=90": 0,
+      "85-89": 0,
+      "<85": 0,
+    };
+    for (const application of this.applications) {
+      if (!application.resume_score) continue;
+      if (application.resume_score >= 90) {
+        counts[">=90"]++;
+      } else if (
+        application.resume_score >= 85 &&
+        application.resume_score < 90
+      ) {
+        counts["85-89"]++;
+      } else {
+        counts["<85"]++;
+      }
+    }
+    return Object.entries(counts).reduce(
+      (acc: { label: string; value: number }[], [key, count]) => {
+        acc.push({ label: key, value: count });
+        return acc;
+      },
+      [],
+    );
   }
 }
 
