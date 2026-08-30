@@ -1,4 +1,4 @@
-import { formatLocation } from "@utils/location.helper";
+import { formatLocation } from "@utils";
 import { eachDayOfInterval, format, parseISO, subDays } from "date-fns";
 import type {
   JobApplication,

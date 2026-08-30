@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { fetchLocation, searchLocations } from "@utils/location.helper";
+import { fetchLocation, searchLocations } from "@utils";
 
 describe("searchLocations", () => {
   it("returns special work-mode options without calling GeoNames", async () => {

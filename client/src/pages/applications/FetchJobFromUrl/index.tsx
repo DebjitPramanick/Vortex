@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { Button } from "@components/atoms/button";
-import {
-  fetchJobDetailsFromUrl,
-  type FetchedJobDetails,
-} from "@utils/jobDetailsExtractor";
+import { fetchJobDetailsFromUrl, type FetchedJobDetails } from "@utils";
 import "./index.css";
 
 export type FetchJobFromUrlProps = {

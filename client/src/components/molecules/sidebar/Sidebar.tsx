@@ -1,10 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { Avatar } from "../../atoms/avatar";
 import { Button } from "../../atoms/button";
-import ApplicationsIcon from "@icons/applications.svg";
-import ProfilesIcon from "@icons/profiles.svg";
-import StatIcon from "@icons/stat.svg";
-import LogoutIcon from "@icons/logout.svg";
+import { ApplicationsIcon, ProfilesIcon, StatIcon, LogoutIcon } from "@icons";
 import "./sidebar.css";
 
 export type SidebarProps = {

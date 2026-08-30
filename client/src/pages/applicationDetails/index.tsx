@@ -15,10 +15,9 @@ import { JobDescriptionCard } from "./JobDescriptionCard";
 import { ScoreProfileCard } from "./ScoreProfileCard";
 import { StatusSelect } from "./StatusSelect";
 import { useApplicationStore } from "@store/useApplicationStore";
-import type { ApplicationStatus, Salary } from "@app-types/application";
-import { formatLocation } from "@utils/location.helper";
-import EditIcon from "@icons/edit.svg";
-import ExternalLinkIcon from "@icons/external-link.svg";
+import type { ApplicationStatus, Salary } from "@app-types";
+import { formatLocation } from "@utils";
+import { EditIcon, ExternalLinkIcon } from "@icons";
 
 function formatSalary(salary: Salary | null): string {
   if (!salary) return "Not set";

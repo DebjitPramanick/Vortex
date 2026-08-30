@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { JobApplication } from "@app-types/application";
-import { ChartDataProcessor, chartColor } from "@services/chart-data-processor";
+import { ChartDataProcessor, chartColor } from "@services";
 
 describe("chartColor", () => {
   it("returns distinct theme colors for the first several slices", () => {

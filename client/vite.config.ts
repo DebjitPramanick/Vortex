@@ -11,14 +11,7 @@ const rootDir = fileURLToPath(new URL(".", import.meta.url));
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss(),
-    jobFetchProxy(),
-    svgr({
-      include: "**/*.svg",
-    }),
-  ],
+  plugins: [react(), tailwindcss(), jobFetchProxy(), svgr()],
   resolve: {
     alias: {
       "@utils": path.resolve(rootDir, "src/utils"),

@@ -8,7 +8,7 @@ import {
 import VxBarChart from "@components/charts/bar";
 import VxPieChart from "@components/charts/pie";
 import { useApplicationStore } from "@store/useApplicationStore";
-import { ChartDataProcessor } from "@services/chart-data-processor";
+import { ChartDataProcessor } from "@services";
 import { useEffect, useMemo } from "react";
 
 function Dashboard() {

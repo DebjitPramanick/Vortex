@@ -7,9 +7,7 @@ import {
   type ReactNode,
 } from "react";
 import { Button } from "@components/atoms/button";
-import ChevronUpIcon from "@icons/chevron-up.svg";
-import ChevronDownIcon from "@icons/chevron-down.svg";
-import FunnelIcon from "@icons/funnel.svg";
+import { ChevronUpIcon, ChevronDownIcon, FunnelIcon } from "@icons";
 import { cx } from "../../cx.ts";
 import { FilterPopup } from "./FilterPopup.tsx";
 import {
@@ -399,9 +397,7 @@ export function Table<T>({
         options={
           openFilterColumn ? (filterOptions[openFilterColumn.id] ?? []) : []
         }
-        selected={
-          openFilterColumn ? (filters[openFilterColumn.id] ?? []) : []
-        }
+        selected={openFilterColumn ? (filters[openFilterColumn.id] ?? []) : []}
         anchorRef={filterAnchorRef}
         onToggle={(value) => {
           if (openFilterColumn) toggleFilterValue(openFilterColumn.id, value);

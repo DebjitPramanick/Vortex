@@ -9,7 +9,7 @@ export type ScoreResumeResult = {
   model: string;
 };
 
-class ResumeScorer {
+export class ResumeScorer {
   private profile: Profile;
   private application: JobApplication;
   private baseUrl: string;
@@ -67,5 +67,3 @@ class ResumeScorer {
     };
   }
 }
-
-export default ResumeScorer;

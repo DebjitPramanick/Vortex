@@ -1,6 +1,6 @@
 import type { HTMLAttributes } from "react";
 import { cx } from "../../cx.ts";
-import UserIcon from "@icons/user.svg";
+import { UserIcon } from "@icons";
 import "./avatar.css";
 
 export type AvatarSize = "sm" | "md";

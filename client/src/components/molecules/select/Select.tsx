@@ -7,8 +7,7 @@ import {
   type KeyboardEvent,
 } from "react";
 import { createPortal } from "react-dom";
-import ChevronDownIcon from "@icons/chevron-down.svg";
-import CheckIcon from "@icons/check.svg";
+import { ChevronDownIcon, CheckIcon } from "@icons";
 import { cx } from "../../cx.ts";
 import "./select.css";
 
@@ -118,7 +117,9 @@ export function Select({
     setOpen(false);
   }
 
-  function openMenu(index = selectedIndex >= 0 ? selectedIndex : firstEnabledIndex(options)) {
+  function openMenu(
+    index = selectedIndex >= 0 ? selectedIndex : firstEnabledIndex(options),
+  ) {
     if (disabled) return;
     setHighlightedIndex(index);
     setOpen(true);
@@ -169,7 +170,9 @@ export function Select({
         left = Math.max(pad, window.innerWidth - pad - width);
       }
 
-      const menuHeight = menuRef.current?.offsetHeight ?? Math.min(256, 12 + options.length * 36);
+      const menuHeight =
+        menuRef.current?.offsetHeight ??
+        Math.min(256, 12 + options.length * 36);
       let top = anchor.bottom + 4;
       if (top + menuHeight > window.innerHeight - pad) {
         top = Math.max(pad, anchor.top - 4 - menuHeight);
@@ -213,7 +216,12 @@ export function Select({
   function onTriggerKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
     if (disabled) return;
 
-    if (event.key.length === 1 && !event.metaKey && !event.ctrlKey && !event.altKey) {
+    if (
+      event.key.length === 1 &&
+      !event.metaKey &&
+      !event.ctrlKey &&
+      !event.altKey
+    ) {
       event.preventDefault();
       consumeTypeahead(event.key);
       return;
@@ -356,7 +364,10 @@ export function Select({
                     >
                       <span>{option.label}</span>
                       {selectedOption ? (
-                        <CheckIcon className="vx-select-check" aria-hidden="true" />
+                        <CheckIcon
+                          className="vx-select-check"
+                          aria-hidden="true"
+                        />
                       ) : null}
                     </div>
                   );

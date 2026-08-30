@@ -11,8 +11,8 @@ import {
 import { Button } from "@components/atoms/button";
 import type { Profile } from "@app-types/profile";
 import "./index.css";
-import TextSearchIcon from "@icons/text-search.svg";
-import ResumeParser from "@services/resume-parser";
+import { TextSearchIcon } from "@icons";
+import { ResumeParser } from "@services";
 import { useProfileStore } from "@store/useProfileStore";
 import { Chip } from "@components/molecules/chip";
 

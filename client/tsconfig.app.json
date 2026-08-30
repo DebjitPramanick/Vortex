@@ -16,13 +16,14 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "paths": {
-      "@utils/*": ["./src/utils/*"],
       "@components/*": ["./src/components/*"],
       "@pages/*": ["./src/pages/*"],
       "@store/*": ["./src/store/*"],
       "@app-types/*": ["./src/types/*"],
       "@icons/*": ["./src/icons/*"],
-      "@services/*": ["./src/services/*"],
+      "@icons": ["./src/icons"],
+      "@utils": ["./src/utils"],
+      "@services": ["./src/services"],
       "@app-types": ["./src/types"],
       "@constants": ["./src/constants"]
     },

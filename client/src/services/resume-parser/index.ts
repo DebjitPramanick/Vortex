@@ -7,7 +7,7 @@ import type {
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
-class ResumeParser {
+export class ResumeParser {
   private file: File;
 
   constructor(inputFile: File) {
@@ -37,5 +37,3 @@ class ResumeParser {
     return fullText.trim();
   };
 }
-
-export default ResumeParser;

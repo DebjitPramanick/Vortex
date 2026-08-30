@@ -7,12 +7,10 @@ import {
   type TableViewState,
 } from "@components/molecules/table";
 import type { JobApplication, JobType, Salary } from "@app-types";
-import { formatLocation } from "@utils/location.helper";
+import { formatLocation } from "@utils";
 import { Button } from "@components/atoms/button";
-import CopyIcon from "@icons/copy.svg";
-import FireIcon from "@icons/fire.svg";
-import MoonIcon from "@icons/moon.svg";
-import SadIcon from "@icons/sad.svg";
+import { CopyIcon } from "@icons";
+import { FireIcon, MoonIcon, SadIcon } from "@icons";
 
 export type ApplicationTableProps = {
   applications: JobApplication[];

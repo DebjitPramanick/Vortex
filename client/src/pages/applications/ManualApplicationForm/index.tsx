@@ -4,14 +4,14 @@ import { z } from "zod";
 import { Button } from "@components/atoms/button";
 import { LocationFinder } from "@components/molecules/location-finder";
 import { Select } from "@components/molecules/select";
-import type { Location, NewApplication, Source } from "@app-types/application";
+import type { Location, NewApplication, Source } from "@app-types";
 import {
   APPLICATION_STATUSES,
   CURRENCIES,
   JOB_TYPES,
   SOURCES,
-} from "@utils/jobDetailsExtractor";
-import { formatLocation } from "@utils/location.helper";
+  formatLocation,
+} from "@utils";
 import "./index.css";
 
 const schema = z.object({

@@ -1,5 +1,5 @@
 import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis } from "recharts";
-import { chartColor } from "@services/chart-data-processor";
+import { chartColor } from "@services";
 import "./bar.css";
 
 export type BarChartDatum = Record<string, string | number | null | undefined>;

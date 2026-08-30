@@ -1,7 +1,7 @@
 import { useId, useRef, useState } from "react";
 import type { ChangeEvent, KeyboardEvent } from "react";
 import type { Location } from "@app-types/application";
-import { formatLocation, searchLocations } from "@utils/location.helper";
+import { formatLocation, searchLocations } from "@utils";
 import "./location-finder.css";
 
 export type LocationFinderProps = {

@@ -13,9 +13,8 @@ import { useProfileStore } from "@store/useProfileStore";
 import { useResumeScoreStore } from "@store/useResumeScoreStore";
 import type { JobApplication } from "@app-types/application";
 import type { ResumeScore } from "@app-types/resumeScore";
-import ResumeScorer from "@services/resume-scorer";
-import ExternalLinkIcon from "@icons/external-link.svg";
-import TrophyIcon from "@icons/trophy.svg";
+import { ResumeScorer } from "@services";
+import { ExternalLinkIcon, TrophyIcon } from "@icons";
 
 type ScoreProfileCardProps = {
   application: JobApplication;

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { debounce } from "@utils/generic.helper";
+import { debounce } from "@utils";
 
 describe("debounce", () => {
   it("accepts a typed async function and delays the call", () => {

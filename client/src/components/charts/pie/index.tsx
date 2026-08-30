@@ -9,7 +9,7 @@ import {
   useActiveTooltipDataPoints,
   useIsTooltipActive,
 } from "recharts";
-import { chartColor } from "@utils/charts.helper";
+import { chartColor } from "@services";
 import "./pie.css";
 
 const RADIAN = Math.PI / 180;

@@ -7,8 +7,7 @@ import {
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
-import ChevronDownIcon from "@icons/chevron-down.svg";
-import CheckIcon from "@icons/check.svg";
+import { ChevronDownIcon, CheckIcon } from "@icons";
 import { cx } from "../../cx.ts";
 import "./split-button.css";
 
@@ -110,7 +109,10 @@ export function SplitButton({
   }, [open]);
 
   return (
-    <div ref={wrapRef} className={cx("vx-split-btn", disabled && "is-disabled")}>
+    <div
+      ref={wrapRef}
+      className={cx("vx-split-btn", disabled && "is-disabled")}
+    >
       <button
         type="button"
         className="vx-split-btn-main"
