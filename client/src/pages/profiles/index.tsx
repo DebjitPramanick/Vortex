@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Button } from "@components/atoms/button";
 import { useProfileStore } from "@store/useProfileStore";
 import { NewProfilePopup } from "./NewProfilePopup";
-import { ProfileGrid } from "./ProfileGrid";
+import ProfilesList from "./ProfilesList";
 
 function Profiles() {
   const { profiles, loading, error, fetchAll, getResumeUrl } =
@@ -52,7 +52,13 @@ function Profiles() {
         <p className="text-[13px] text-vortex-error">{openError}</p>
       ) : null}
 
-      <ProfileGrid
+      {/* <ProfileGrid
+        profiles={profiles}
+        loading={loading}
+        onOpenResume={(row) => void handleOpenResume(row.resume_path)}
+      /> */}
+
+      <ProfilesList
         profiles={profiles}
         loading={loading}
         onOpenResume={(row) => void handleOpenResume(row.resume_path)}
