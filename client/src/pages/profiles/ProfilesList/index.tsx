@@ -47,11 +47,15 @@ const ProfilesList = ({
   const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
   const [resumeUrl, setResumeUrl] = useState<string | null>(null);
   const [fetchingResumeUrl, setFetchingResumeUrl] = useState(false);
-  const [reumseIframeHeight, setReumseIframeHeight] = useState(0);
+  const [resumeIframeHeight, setResumeIframeHeight] = useState<string>("");
 
   const profileViewerHeaderRef = useRef<HTMLDivElement>(null);
 
   const normalizedQuery = query.trim().toLowerCase();
+  const activeProfile = useMemo(
+    () => selectedProfile ?? profiles[0] ?? null,
+    [selectedProfile, profiles],
+  );
 
   const visible = useMemo(
     () => profiles.filter((profile) => matchesQuery(profile, normalizedQuery)),
@@ -95,31 +99,30 @@ const ProfilesList = ({
   );
 
   const handleOpenResume = useCallback(() => {
-    if (selectedProfile) {
-      onOpenResume?.(selectedProfile);
+    if (activeProfile) {
+      onOpenResume?.(activeProfile);
     }
-  }, [selectedProfile, onOpenResume]);
+  }, [activeProfile, onOpenResume]);
 
-  const handleSelectProfile = useCallback((profile: Profile) => {
-    setSelectedProfile(profile);
-  }, []);
-
-  useEffect(() => {
-    if (selectedProfile) {
-      fetchResume(selectedProfile);
-    }
-  }, [selectedProfile, fetchResume]);
+  const handleSelectProfile = useCallback(
+    (profile: Profile) => {
+      setSelectedProfile(profile);
+      fetchResume(profile);
+    },
+    [fetchResume],
+  );
 
   useEffect(() => {
-    if (profiles.length > 0) {
-      setSelectedProfile(profiles[0]);
+    if (activeProfile) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      fetchResume(activeProfile);
     }
-  }, [profiles]);
+  }, [activeProfile]);
 
   useEffect(() => {
     if (profileViewerHeaderRef.current) {
       const iframeHeight = `calc(100% - ${profileViewerHeaderRef.current.clientHeight}px)`;
-      setReumseIframeHeight(iframeHeight);
+      setResumeIframeHeight(iframeHeight);
     }
   }, [profileViewerHeaderRef]);
 
@@ -198,9 +201,7 @@ const ProfilesList = ({
               className="vx-profile-viewer-header"
               ref={profileViewerHeaderRef}
             >
-              <h2 className="vx-profile-viewer-title">
-                {selectedProfile?.name}
-              </h2>
+              <h2 className="text-lg font-bold">{activeProfile?.name}</h2>
               <Button
                 type="button"
                 size="sm"
@@ -218,7 +219,7 @@ const ProfilesList = ({
                 title="Profile Viewer"
                 allow="clipboard-read; clipboard-write"
                 className="vx-profile-viewer-iframe"
-                style={{ height: reumseIframeHeight }}
+                style={{ height: resumeIframeHeight }}
               />
             ) : null}
           </div>
