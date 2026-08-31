@@ -138,7 +138,7 @@ const COLUMNS: TableColumn<JobApplication>[] = [
     id: "resumeScore",
     header: "Resume Score",
     filterable: false,
-    getSortValue: (row) => row.resume_score ?? null,
+    getSortValue: (row) => row.resume_score ?? 0,
     render: (row) => {
       let color = "text-vortex-secondary";
       let icon = null;

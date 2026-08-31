@@ -36,6 +36,11 @@ export function createApplicationStore(repository: ApplicationRepository) {
       set({ loading: true, error: null });
       try {
         const applications = await repository.getAll();
+        applications.sort((a, b) => {
+          return (
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          );
+        });
         set({ applications, loading: false });
       } catch (error) {
         set({ loading: false, error: toMessage(error) });
