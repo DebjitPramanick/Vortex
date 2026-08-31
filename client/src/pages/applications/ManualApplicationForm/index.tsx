@@ -4,15 +4,16 @@ import { z } from "zod";
 import { Button } from "@components/atoms/button";
 import { LocationFinder } from "@components/molecules/location-finder";
 import { Select } from "@components/molecules/select";
-import type { Location, NewApplication, Source } from "@app-types";
+import type { Location, NewApplication, JobSource } from "@app-types";
+import { formatLocation } from "@utils";
+import "./index.css";
 import {
   APPLICATION_STATUSES,
   CURRENCIES,
   JOB_TYPES,
-  SOURCES,
-  formatLocation,
-} from "@utils";
-import "./index.css";
+  JOB_SOURCES,
+  JOB_SOURCE_LABELS,
+} from "@constants";
 
 const schema = z.object({
   company: z.string().min(1, "Company is required"),
@@ -49,7 +50,7 @@ const schema = z.object({
     ),
   salary_currency: z.enum(CURRENCIES),
   job_type: z.enum(JOB_TYPES).nullable(),
-  source: z.enum(SOURCES).nullable(),
+  source: z.enum(JOB_SOURCES).nullable(),
   notes: z.string(),
 });
 
@@ -241,13 +242,13 @@ export function ManualApplicationForm({
               placeholder="Not set"
               options={[
                 { value: "", label: "Not set" },
-                ...SOURCES.map((source) => ({
+                ...JOB_SOURCES.map((source) => ({
                   value: source,
-                  label: titleCase(source),
+                  label: JOB_SOURCE_LABELS[source],
                 })),
               ]}
               onChange={(value) =>
-                field.onChange(value === "" ? null : (value as Source))
+                field.onChange(value === "" ? null : (value as JobSource))
               }
             />
           )}

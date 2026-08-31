@@ -9,41 +9,6 @@ export type FetchedJobDetails = Pick<
   job_description: string | null;
 };
 
-export const APPLICATION_STATUSES = [
-  "saved",
-  "applied",
-  "screening",
-  "interview",
-  "offer",
-  "rejected",
-  "withdrawn",
-] as const;
-
-export const JOB_TYPES = ["remote", "onsite", "hybrid"] as const;
-
-export const SOURCES = [
-  "indeed",
-  "linkedin",
-  "glassdoor",
-  "other",
-  "referred",
-] as const;
-
-export const CURRENCIES = [
-  "USD",
-  "EUR",
-  "GBP",
-  "CAD",
-  "AUD",
-  "NZD",
-  "CHF",
-  "JPY",
-  "CNY",
-  "INR",
-  "BRL",
-  "OTHER",
-] as const;
-
 type CheerioAPI = ReturnType<typeof cheerio.load>;
 
 class InformationExtractor {

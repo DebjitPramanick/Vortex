@@ -4,7 +4,7 @@ import type {
   JobType,
   Location,
   Salary,
-  Source,
+  JobSource,
 } from "../application";
 
 export type Json =
@@ -26,7 +26,7 @@ export type Database = {
           role: string;
           salary: Salary | null;
           status: ApplicationStatus;
-          source: Source | null;
+          source: JobSource | null;
           location: Location;
           job_url: string;
           job_description: string | null;
@@ -46,7 +46,7 @@ export type Database = {
           role: string;
           salary?: Salary | null;
           status?: ApplicationStatus;
-          source?: Source | null;
+          source?: JobSource | null;
           location: Location;
           job_url: string;
           job_description?: string | null;
@@ -64,7 +64,7 @@ export type Database = {
           role?: string;
           salary?: Salary | null;
           status?: ApplicationStatus;
-          source?: Source | null;
+          source?: JobSource | null;
           location?: Location;
           job_url?: string;
           job_description?: string | null;
@@ -204,7 +204,7 @@ export type Database = {
     };
     Enums: {
       application_status: ApplicationStatus;
-      application_source: Source;
+      application_source: JobSource;
       currency: Currency;
       job_type: JobType;
     };

@@ -7,7 +7,17 @@ export type ApplicationStatus =
   | "rejected"
   | "withdrawn";
 
-export type Source = "indeed" | "linkedin" | "glassdoor" | "other" | "referred";
+export type JobSource =
+  | "indeed"
+  | "linkedin"
+  | "glassdoor"
+  | "google_search"
+  | "company_website"
+  | "naukri"
+  | "reach_out"
+  | "referred"
+  | "other";
+
 export type Currency =
   | "USD"
   | "EUR"
@@ -44,7 +54,7 @@ export type JobApplication = {
   role: string;
   salary: Salary | null;
   status: ApplicationStatus;
-  source: Source | null;
+  source: JobSource | null;
   location: Location;
   job_url: string;
   job_description: string | null;
@@ -63,7 +73,7 @@ export type NewApplication = {
   role: string;
   salary?: Salary | null;
   status?: ApplicationStatus;
-  source?: Source | null;
+  source?: JobSource | null;
   location: Location;
   job_url: string;
   job_description?: string | null;

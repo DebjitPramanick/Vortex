@@ -18,6 +18,7 @@ import { useApplicationStore } from "@store/useApplicationStore";
 import type { ApplicationStatus, Salary } from "@app-types";
 import { formatLocation } from "@utils";
 import { EditIcon, ExternalLinkIcon } from "@icons";
+import { JOB_SOURCE_LABELS } from "@constants";
 
 function formatSalary(salary: Salary | null): string {
   if (!salary) return "Not set";
@@ -195,7 +196,9 @@ function ApplicationDetails() {
               <dl className="grid gap-4 sm:grid-cols-2">
                 <Detail
                   label="Source"
-                  value={selected.source ? titleCase(selected.source) : "—"}
+                  value={
+                    selected.source ? JOB_SOURCE_LABELS[selected.source] : "—"
+                  }
                 />
                 <Detail
                   label="Salary"
