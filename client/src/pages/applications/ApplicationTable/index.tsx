@@ -11,6 +11,7 @@ import { formatLocation } from "@utils";
 import { Button } from "@components/atoms/button";
 import { CopyIcon } from "@icons";
 import { FireIcon, MoonIcon, SadIcon } from "@icons";
+import { useRef, useState, useEffect } from "react";
 
 export type ApplicationTableProps = {
   applications: JobApplication[];
@@ -194,8 +195,31 @@ export function ApplicationTable({
   view,
   onViewChange,
 }: ApplicationTableProps) {
+  const tableRef = useRef<HTMLDivElement>(null);
+  const [pageSize, setPageSize] = useState<number>(PAGE_SIZE);
+
+  useEffect(() => {
+    if (!tableRef.current) return;
+
+    const updatePageSize = () => {
+      if (tableRef.current) {
+        setPageSize(
+          Math.floor(tableRef.current.clientHeight / 50) || PAGE_SIZE,
+        );
+      }
+    };
+
+    updatePageSize();
+
+    const observer = new ResizeObserver(updatePageSize);
+    observer.observe(tableRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <Table
+      ref={tableRef as React.RefObject<HTMLDivElement>}
       rows={applications}
       columns={COLUMNS}
       getRowId={(row) => row.id}
@@ -203,7 +227,7 @@ export function ApplicationTable({
       getSearchValue={(row) =>
         `${row.company} ${row.role} ${formatLocation(row.location)} ${row.id}`
       }
-      pageSize={PAGE_SIZE}
+      pageSize={pageSize}
       loading={loading}
       emptyMessage="No applications match this view."
       onRowClick={onRowClick}

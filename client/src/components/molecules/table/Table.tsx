@@ -50,6 +50,7 @@ export type TableColumn<T> = TableColumnBase<T> &
   TableColumnFilter<T>;
 
 export type TableProps<T> = {
+  ref?: React.RefObject<HTMLDivElement>;
   rows: T[];
   columns: TableColumn<T>[];
   getRowId: (row: T) => string;
@@ -124,6 +125,7 @@ export function Table<T>({
   className,
   view: viewProp,
   onViewChange,
+  ref,
 }: TableProps<T>) {
   const [internalView, setInternalView] = useState(DEFAULT_TABLE_VIEW);
   const view = viewProp ?? internalView;
@@ -262,7 +264,7 @@ export function Table<T>({
   const openFilterColumn = columns.find((column) => column.id === openFilterId);
 
   return (
-    <div className={cx("vx-table", className)}>
+    <div className={cx("vx-table", className)} ref={ref}>
       <div className="vx-table-toolbar">
         <label className="vx-table-search">
           <span className="sr-only">{searchPlaceholder}</span>
