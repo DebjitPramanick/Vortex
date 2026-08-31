@@ -9,7 +9,7 @@ import {
 import type { JobApplication, JobType, Salary } from "@app-types";
 import { formatLocation } from "@utils";
 import { Button } from "@components/atoms/button";
-import { CopyIcon } from "@icons";
+import { CopyIcon, ExternalLinkIcon } from "@icons";
 import { FireIcon, MoonIcon, SadIcon } from "@icons";
 import { useRef, useState, useEffect } from "react";
 
@@ -66,6 +66,15 @@ function handleCopyJobUrl(
   e.preventDefault();
   e.stopPropagation();
   navigator.clipboard.writeText(row.job_url);
+}
+
+function handleOpenJobListing(
+  e: React.MouseEvent<HTMLButtonElement>,
+  row: JobApplication,
+) {
+  e.preventDefault();
+  e.stopPropagation();
+  window.open(row.job_url, "_blank");
 }
 
 const COLUMNS: TableColumn<JobApplication>[] = [
@@ -176,12 +185,15 @@ const COLUMNS: TableColumn<JobApplication>[] = [
     sortable: false,
     render: (row) => (
       <span className="vx-meta">
+        <Button variant="ghost" onClick={(e) => handleCopyJobUrl(e, row)}>
+          <CopyIcon className="text-vortex-primary" />
+        </Button>
         <Button
           variant="ghost"
-          size="sm"
-          onClick={(e) => handleCopyJobUrl(e, row)}
+          onClick={(e) => handleOpenJobListing(e, row)}
+          aria-label="Open job listing"
         >
-          <CopyIcon className="w-4 h-4" />
+          <ExternalLinkIcon className="text-vortex-primary" aria-hidden />
         </Button>
       </span>
     ),
