@@ -11,3 +11,7 @@ export function debounce<Args extends unknown[]>(
     }, delay);
   };
 }
+
+export function copyToClipboard(text: string) {
+  navigator.clipboard.writeText(text);
+}

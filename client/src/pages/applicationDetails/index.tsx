@@ -16,9 +16,10 @@ import { ScoreProfileCard } from "./ScoreProfileCard";
 import { StatusSelect } from "./StatusSelect";
 import { useApplicationStore } from "@store/useApplicationStore";
 import type { ApplicationStatus, Salary } from "@app-types";
-import { formatLocation } from "@utils";
-import { EditIcon, ExternalLinkIcon } from "@icons";
+import { copyToClipboard, formatLocation } from "@utils";
+import { CopyIcon, EditIcon, ExternalLinkIcon } from "@icons";
 import { JOB_SOURCE_LABELS } from "@constants";
+import { Chip } from "@components/molecules/chip";
 
 function formatSalary(salary: Salary | null): string {
   if (!salary) return "Not set";
@@ -137,15 +138,17 @@ function ApplicationDetails() {
         </Link>
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
           <div className="min-w-0">
-            <h1 className="vx-page-title">{selected.company}</h1>
-            <p className="mt-1 flex flex-wrap items-center text-[13px] text-vortex-secondary">
-              {selected.role}
-              <MetaDot />
+            <h1 className="vx-page-title">
+              {selected.role} @ {selected.company}
+            </h1>
+            <p className="mt-1 flex flex-wrap items-center text-[16px] text-vortex-secondary">
               {formatLocation(selected.location)}
               {selected.job_type ? (
                 <>
                   <MetaDot />
-                  {titleCase(selected.job_type)}
+                  <Chip size="lg" variant="applied">
+                    {titleCase(selected.job_type)}
+                  </Chip>
                 </>
               ) : null}
               {selected.job_url ? (
@@ -158,8 +161,17 @@ function ApplicationDetails() {
                     rel="noreferrer"
                     aria-label="Open job listing"
                   >
-                    <ExternalLinkIcon className="h-3.5 w-3.5" aria-hidden />
+                    <ExternalLinkIcon
+                      className="h-3.5 w-3.5 text-vortex-primary"
+                      aria-hidden
+                    />
                   </a>
+                  <MetaDot />
+                  <CopyIcon
+                    className="h-3.5 w-3.5 text-vortex-success cursor-pointer"
+                    aria-hidden
+                    onClick={() => copyToClipboard(selected.job_url)}
+                  />
                 </>
               ) : null}
             </p>
