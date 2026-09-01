@@ -121,11 +121,11 @@ export function ScoreProfileCard({
   const renderScoreIcon = () => {
     if (!application.resume_score) return null;
     if (application.resume_score >= 90) {
-      return <FireIcon className="h-4 w-4 text-vortex-success" />;
+      return <FireIcon className="h-5 w-5 text-vortex-success" />;
     } else if (application.resume_score >= 85) {
-      return <FireIcon className="h-4 w-4 text-vortex-warning" />;
+      return <FireIcon className="h-5 w-5 text-vortex-warning" />;
     } else {
-      return <FireIcon className="h-4 w-4 text-vortex-error" />;
+      return <FireIcon className="h-5 w-5 text-vortex-error" />;
     }
   };
 
