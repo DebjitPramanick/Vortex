@@ -9,6 +9,15 @@ export function buildPrompt(
 
   Score based on this specific JD, not the resume alone.
 
+  First evaluate the resume across these sections, then derive the final score:
+  - Required skills & qualifications
+  - Relevant experience
+  - Accomplishments & impact
+  - Ownership & seniority
+  - ATS compatibility & recruiter readability
+
+  Use the section evaluations to calculate a balanced overall score. The final score may be a decimal (e.g. 82.5), not necessarily a whole number.
+
   - Distinguish REQUIRED vs PREFERRED skills/qualifications; prioritize required ones when scoring.
   - Do NOT penalize missing skills that are clearly irrelevant to this role.
   - In "missing_skills", include only genuinely missing qualifications; if the resume appears to have the qualification but communicates it poorly, do not treat it as missing.
