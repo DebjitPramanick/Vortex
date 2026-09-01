@@ -15,6 +15,7 @@ import { Button } from "@components/atoms/button";
 import { Chip } from "@components/molecules/chip";
 import { ExternalLinkIcon, TextSearchIcon } from "@icons";
 import "./index.css";
+import Skeleton from "@components/molecules/skeleton";
 
 export type ProfilesListProps = {
   profiles: Profile[];
@@ -212,7 +213,7 @@ const ProfilesList = ({
               </Button>
             </div>
             {fetchingResumeUrl ? (
-              <p>Fetching resume…</p>
+              <Skeleton height="100%" />
             ) : resumeUrl ? (
               <iframe
                 src={`${resumeUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
