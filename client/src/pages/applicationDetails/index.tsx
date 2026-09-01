@@ -193,7 +193,7 @@ function ApplicationDetails() {
             <CardHeader>
               <div>
                 <CardTitle>Details</CardTitle>
-                <CardDescription>Role metadata and notes</CardDescription>
+                <CardDescription>Metadata and notes</CardDescription>
               </div>
               <Button
                 size="sm"
@@ -205,7 +205,7 @@ function ApplicationDetails() {
               </Button>
             </CardHeader>
             <CardBody>
-              <dl className="grid gap-4 sm:grid-cols-2">
+              <dl className="grid gap-4 sm:grid-cols-3">
                 <Detail
                   label="Source"
                   value={
