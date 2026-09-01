@@ -150,19 +150,20 @@ const COLUMNS: TableColumn<JobApplication>[] = [
     filterable: false,
     getSortValue: (row) => row.resume_score ?? 0,
     render: (row) => {
+      const roundedScore = Math.round(row.resume_score ?? 0);
       let color = "text-vortex-secondary";
       let icon = null;
       let variant: ChipVariant = "saved";
-      if (row.resume_score) {
-        if (row.resume_score >= 90) {
+      if (roundedScore) {
+        if (roundedScore >= 90) {
           color = "text-vortex-success";
           icon = <FireIcon className="w-4 h-4" />;
           variant = "offer";
-        } else if (row.resume_score >= 85 && row.resume_score < 90) {
+        } else if (roundedScore >= 85 && roundedScore < 90) {
           color = "text-vortex-warning";
           icon = <MoonIcon className="w-4 h-4" />;
           variant = "withdrawn";
-        } else if (row.resume_score < 85) {
+        } else if (roundedScore < 85) {
           color = "text-vortex-error";
           icon = <SadIcon className="w-4 h-4" />;
           variant = "rejected";
@@ -173,7 +174,7 @@ const COLUMNS: TableColumn<JobApplication>[] = [
           variant={variant}
           className={`vx-meta ${color} flex items-center gap-2`}
         >
-          {icon} {row.resume_score ?? "—"}
+          {icon} {roundedScore ?? "—"}
         </Chip>
       );
     },

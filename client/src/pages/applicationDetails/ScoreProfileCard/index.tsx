@@ -126,9 +126,10 @@ export function ScoreProfileCard({
 
   const renderScoreIcon = () => {
     if (!application.resume_score) return null;
-    if (application.resume_score >= 90) {
+    const roundedScore = Math.round(application.resume_score);
+    if (roundedScore >= 90) {
       return <FireIcon className="h-5 w-5 text-vortex-success" />;
-    } else if (application.resume_score >= 85) {
+    } else if (roundedScore >= 85) {
       return <MoonIcon className="h-5 w-5 text-vortex-warning" />;
     } else {
       return <SadIcon className="h-5 w-5 text-vortex-error" />;
@@ -137,8 +138,9 @@ export function ScoreProfileCard({
 
   const scoreChipVariant = useMemo(() => {
     if (!application.resume_score) return "error";
-    if (application.resume_score >= 90) return "success";
-    if (application.resume_score >= 85) return "warning";
+    const roundedScore = Math.round(application.resume_score);
+    if (roundedScore >= 90) return "success";
+    if (roundedScore >= 85) return "warning";
     return "error";
   }, [application.resume_score]);
 
@@ -223,7 +225,7 @@ export function ScoreProfileCard({
               <div className={`vx-score-chip ${scoreChipVariant}`}>
                 {renderScoreIcon()}
                 <p className="text-2xl font-semibold tabular-nums">
-                  {application.resume_score}
+                  {Math.round(application.resume_score)}
                   <span className="ml-1 text-[13px] font-normal">/ 100</span>
                 </p>
               </div>
