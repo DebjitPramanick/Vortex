@@ -161,7 +161,7 @@ const COLUMNS: TableColumn<JobApplication>[] = [
         } else if (row.resume_score >= 85 && row.resume_score < 90) {
           color = "text-vortex-warning";
           icon = <MoonIcon className="w-4 h-4" />;
-          variant = "interview";
+          variant = "withdrawn";
         } else if (row.resume_score < 85) {
           color = "text-vortex-error";
           icon = <SadIcon className="w-4 h-4" />;

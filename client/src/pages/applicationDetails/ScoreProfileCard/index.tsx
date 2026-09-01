@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Card,
@@ -14,7 +14,8 @@ import { useResumeScoreStore } from "@store/useResumeScoreStore";
 import type { JobApplication } from "@app-types/application";
 import type { ResumeScore } from "@app-types/resumeScore";
 import { ResumeScorer } from "@services";
-import { ExternalLinkIcon, TrophyIcon } from "@icons";
+import { ExternalLinkIcon, FireIcon, TrophyIcon } from "@icons";
+import "./index.css";
 
 type ScoreProfileCardProps = {
   application: JobApplication;
@@ -117,6 +118,24 @@ export function ScoreProfileCard({
     }
   }
 
+  const renderScoreIcon = () => {
+    if (!application.resume_score) return null;
+    if (application.resume_score >= 90) {
+      return <FireIcon className="h-4 w-4 text-vortex-success" />;
+    } else if (application.resume_score >= 85) {
+      return <FireIcon className="h-4 w-4 text-vortex-warning" />;
+    } else {
+      return <FireIcon className="h-4 w-4 text-vortex-error" />;
+    }
+  };
+
+  const scoreChipVariant = useMemo(() => {
+    if (!application.resume_score) return "error";
+    if (application.resume_score >= 90) return "success";
+    if (application.resume_score >= 85) return "warning";
+    return "error";
+  }, [application.resume_score]);
+
   return (
     <Card variant="accent">
       <CardHeader>
@@ -195,15 +214,13 @@ export function ScoreProfileCard({
 
           {application.resume_score != null ? (
             <div className="border-t border-vortex-border pt-3">
-              <p className="text-[12px] font-medium text-vortex-secondary">
-                Overall score
-              </p>
-              <p className="mt-1 text-2xl font-semibold tabular-nums text-vortex-fg">
-                {application.resume_score}
-                <span className="ml-1 text-[13px] font-normal text-vortex-muted">
-                  / 100
-                </span>
-              </p>
+              <div className={`vx-score-chip ${scoreChipVariant}`}>
+                {renderScoreIcon()}
+                <p className="text-2xl font-semibold tabular-nums">
+                  {application.resume_score}
+                  <span className="ml-1 text-[13px] font-normal">/ 100</span>
+                </p>
+              </div>
               {latestScore?.summary ? (
                 <p className="mt-2 text-[13px] leading-5 text-vortex-fg">
                   {latestScore.summary}
