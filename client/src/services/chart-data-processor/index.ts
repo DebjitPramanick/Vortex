@@ -50,15 +50,13 @@ function startOfLocalDay(value: Date): Date {
 
 export class ChartDataProcessor {
   private applications: JobApplication[];
-  private applicationsByLocation: Record<string, JobApplication[]>;
 
   constructor(applications: JobApplication[]) {
     this.applications = applications;
-    this.applicationsByLocation = this.groupByLocation(applications);
   }
 
-  private groupByLocation(applications: JobApplication[]) {
-    return applications.reduce(
+  public numberOfMostApplicationsByLocation(): ApplicationCountByLocation[] {
+    const applicationsByLocation = this.applications.reduce(
       (acc: Record<string, JobApplication[]>, application: JobApplication) => {
         const key = formatLocation(application.location);
         if (!acc[key]) {
@@ -69,12 +67,11 @@ export class ChartDataProcessor {
       },
       {},
     );
-  }
-
-  public numberOfApplicationsByLocation(): ApplicationCountByLocation[] {
-    return Object.entries(this.applicationsByLocation).reduce(
+    return Object.entries(applicationsByLocation).reduce(
       (acc: ApplicationCountByLocation[], [key, applications]) => {
-        acc.push({ location: key, count: applications.length });
+        if (applications.length > 5) {
+          acc.push({ location: key, count: applications.length });
+        }
         return acc;
       },
       [],

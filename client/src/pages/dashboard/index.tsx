@@ -19,15 +19,15 @@ function Dashboard() {
   }, [fetchAll]);
 
   const {
-    nApplicationsByLocation,
+    nMostApplicationsByLocation,
     nApplicationsByStatus,
     applicationsInLast30Days,
     nApplicationsByResumeScore,
   } = useMemo(() => {
     const chartDataProcessor = new ChartDataProcessor(applications);
     return {
-      nApplicationsByLocation:
-        chartDataProcessor.numberOfApplicationsByLocation(),
+      nMostApplicationsByLocation:
+        chartDataProcessor.numberOfMostApplicationsByLocation(),
       nApplicationsByStatus: chartDataProcessor.numberOfApplicationsByStatus(),
       applicationsInLast30Days:
         chartDataProcessor.numberOfApplicationsByDay(30),
@@ -40,7 +40,7 @@ function Dashboard() {
     <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto">
       <div className="flex flex-shrink-0 flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="vx-page-title">Dashboard</h1>
+          <h1 className="vx-page-title">Reports</h1>
           <p className="mt-1 text-[13px] text-vortex-secondary">
             See how your pipeline is distributed.
           </p>
@@ -53,9 +53,9 @@ function Dashboard() {
         <Card>
           <CardHeader>
             <div>
-              <CardTitle>Applications by location</CardTitle>
+              <CardTitle>Most applications by location</CardTitle>
               <CardDescription>
-                Count of roles grouped by work location.
+                The locations with the most applications are shown.
               </CardDescription>
             </div>
           </CardHeader>
@@ -66,7 +66,7 @@ function Dashboard() {
               </p>
             ) : (
               <VxPieChart
-                data={nApplicationsByLocation}
+                data={nMostApplicationsByLocation}
                 nameKey="location"
                 dataKey="count"
               />
