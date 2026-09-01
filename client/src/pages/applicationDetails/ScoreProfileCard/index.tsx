@@ -14,7 +14,13 @@ import { useResumeScoreStore } from "@store/useResumeScoreStore";
 import type { JobApplication } from "@app-types/application";
 import type { ResumeScore } from "@app-types/resumeScore";
 import { ResumeScorer } from "@services";
-import { ExternalLinkIcon, FireIcon, TrophyIcon } from "@icons";
+import {
+  ExternalLinkIcon,
+  FireIcon,
+  MoonIcon,
+  SadIcon,
+  TrophyIcon,
+} from "@icons";
 import "./index.css";
 
 type ScoreProfileCardProps = {
@@ -123,9 +129,9 @@ export function ScoreProfileCard({
     if (application.resume_score >= 90) {
       return <FireIcon className="h-5 w-5 text-vortex-success" />;
     } else if (application.resume_score >= 85) {
-      return <FireIcon className="h-5 w-5 text-vortex-warning" />;
+      return <MoonIcon className="h-5 w-5 text-vortex-warning" />;
     } else {
-      return <FireIcon className="h-5 w-5 text-vortex-error" />;
+      return <SadIcon className="h-5 w-5 text-vortex-error" />;
     }
   };
 
