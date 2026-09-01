@@ -3,14 +3,24 @@ import { Button } from "@components/atoms/button";
 import { useProfileStore } from "@store/useProfileStore";
 import { NewProfilePopup } from "./NewProfilePopup";
 import ProfilesList from "./ProfilesList";
+import type { Profile } from "@app-types/profile";
+import { EditProfilePopup } from "./EditProfilePopup";
 
 function Profiles() {
   const { profiles, loading, error, fetchAll, getResumeUrl } =
     useProfileStore();
   const [createOpen, setCreateOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [editingProfile, setEditingProfile] = useState<Profile | null>(null);
   const [openError, setOpenError] = useState<string | null>(null);
 
   const closeCreate = useCallback(() => setCreateOpen(false), []);
+  const closeEdit = useCallback(() => setEditOpen(false), []);
+
+  const handleEditProfile = useCallback((profile: Profile) => {
+    setEditingProfile(profile);
+    setEditOpen(true);
+  }, []);
 
   useEffect(() => {
     void fetchAll().catch(() => undefined);
@@ -62,9 +72,15 @@ function Profiles() {
         profiles={profiles}
         loading={loading}
         onOpenResume={(row) => void handleOpenResume(row.resume_path)}
+        onEditProfile={handleEditProfile}
       />
 
       <NewProfilePopup open={createOpen} onClose={closeCreate} />
+      <EditProfilePopup
+        profile={editingProfile}
+        open={editOpen}
+        onClose={closeEdit}
+      />
     </div>
   );
 }

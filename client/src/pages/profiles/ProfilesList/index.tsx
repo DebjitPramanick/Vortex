@@ -13,7 +13,7 @@ import {
 } from "@components/atoms/card";
 import { Button } from "@components/atoms/button";
 import { Chip } from "@components/molecules/chip";
-import { ExternalLinkIcon, TextSearchIcon } from "@icons";
+import { EditIcon, ExternalLinkIcon, TextSearchIcon } from "@icons";
 import "./index.css";
 import Skeleton from "@components/molecules/skeleton";
 
@@ -21,6 +21,7 @@ export type ProfilesListProps = {
   profiles: Profile[];
   loading?: boolean;
   onOpenResume?: (profile: Profile) => void;
+  onEditProfile?: (profile: Profile) => void;
 };
 
 function formatDate(value: string): string {
@@ -42,6 +43,7 @@ const ProfilesList = ({
   profiles,
   loading,
   onOpenResume,
+  onEditProfile,
 }: ProfilesListProps) => {
   const { getResumeUrl, update } = useProfileStore();
   const [query, setQuery] = useState("");
@@ -82,6 +84,15 @@ const ProfilesList = ({
       }
     },
     [getResumeUrl, update],
+  );
+
+  const handleEditProfile = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>, profile: Profile) => {
+      event.stopPropagation();
+      event.preventDefault();
+      onEditProfile?.(profile);
+    },
+    [onEditProfile],
   );
 
   const fetchResume = useCallback(
@@ -172,14 +183,24 @@ const ProfilesList = ({
                       Created {formatDate(profile.created_at)}
                     </CardDescription>
                   </div>
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="secondary"
-                    onClick={(e) => handleParseResume(e, profile)}
-                  >
-                    <TextSearchIcon />
-                  </Button>
+                  <div className="flex gap-2 items-center">
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="secondary"
+                      onClick={(e) => handleParseResume(e, profile)}
+                    >
+                      <TextSearchIcon />
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="secondary"
+                      onClick={(e) => handleEditProfile(e, profile)}
+                    >
+                      <EditIcon />
+                    </Button>
+                  </div>
                 </CardHeader>
                 <CardBody>
                   <p className="vx-profile-card-notes">
