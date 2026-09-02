@@ -150,7 +150,9 @@ const COLUMNS: TableColumn<JobApplication>[] = [
     filterable: false,
     getSortValue: (row) => row.resume_score ?? 0,
     render: (row) => {
-      const roundedScore = Math.round(row.resume_score ?? 0);
+      const roundedScore = row.resume_score
+        ? Math.round(row.resume_score)
+        : null;
       let color = "text-vortex-secondary";
       let icon = null;
       let variant: ChipVariant = "saved";
