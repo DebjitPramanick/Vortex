@@ -89,7 +89,6 @@ const COLUMNS: TableColumn<JobApplication>[] = [
   {
     id: "role",
     header: "Role",
-    sticky: true,
     filterable: false,
     sortable: false,
     render: (row) => <span className="text-vortex-secondary">{row.role}</span>,
