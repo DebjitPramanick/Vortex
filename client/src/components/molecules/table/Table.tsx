@@ -22,6 +22,7 @@ export type { TableSortDirection, TableViewState } from "./tableViewState.ts";
 type TableColumnBase<T> = {
   id: string;
   header: string;
+  sticky?: boolean;
   render: (row: T) => ReactNode;
 };
 
@@ -294,7 +295,11 @@ export function Table<T>({
                 const filterOpen = openFilterId === column.id;
                 const filterActive = Boolean(filters[column.id]?.length);
                 return (
-                  <th key={column.id} scope="col">
+                  <th
+                    key={column.id}
+                    scope="col"
+                    className={cx(column.sticky && "vx-table-th-sticky")}
+                  >
                     <div className="vx-table-th">
                       <span>{column.header}</span>
                       <span className="vx-table-th-actions">
@@ -348,7 +353,12 @@ export function Table<T>({
                   onKeyDown={(event) => handleRowKeyDown(event, row)}
                 >
                   {columns.map((column) => (
-                    <td key={column.id}>{column.render(row)}</td>
+                    <td
+                      key={column.id}
+                      className={cx(column.sticky && "vx-table-td-sticky")}
+                    >
+                      {column.render(row)}
+                    </td>
                   ))}
                 </tr>
               ))

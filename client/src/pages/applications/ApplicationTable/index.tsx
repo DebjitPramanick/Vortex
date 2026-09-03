@@ -81,6 +81,7 @@ const COLUMNS: TableColumn<JobApplication>[] = [
   {
     id: "company",
     header: "Company",
+    sticky: true,
     filterable: false,
     sortable: false,
     render: (row) => <span className="font-medium">{row.company}</span>,
@@ -114,18 +115,18 @@ const COLUMNS: TableColumn<JobApplication>[] = [
       </span>
     ),
   },
-  {
-    id: "job_type",
-    header: "Type",
-    getSortValue: (row) => row.job_type ?? "",
-    getFilterValue: (row) =>
-      row.job_type ? JOB_TYPE_LABEL[row.job_type] : "—",
-    render: (row) => (
-      <span className="text-vortex-secondary">
-        {row.job_type ? JOB_TYPE_LABEL[row.job_type] : "—"}
-      </span>
-    ),
-  },
+  // {
+  //   id: "job_type",
+  //   header: "Type",
+  //   getSortValue: (row) => row.job_type ?? "",
+  //   getFilterValue: (row) =>
+  //     row.job_type ? JOB_TYPE_LABEL[row.job_type] : "—",
+  //   render: (row) => (
+  //     <span className="text-vortex-secondary">
+  //       {row.job_type ? JOB_TYPE_LABEL[row.job_type] : "—"}
+  //     </span>
+  //   ),
+  // },
   {
     id: "salary",
     header: "Salary",

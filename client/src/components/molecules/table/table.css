@@ -82,6 +82,21 @@
   color: var(--color-vortex-primary);
 }
 
+.vx-table-th-sticky {
+  left: 0;
+  z-index: 2;
+  background: var(--color-vortex-bg);
+  border-right: 1px solid var(--color-vortex-border);
+}
+
+.vx-table-td-sticky {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: var(--color-vortex-bg);
+  border-right: 1px solid var(--color-vortex-border);
+}
+
 .vx-table-filter-popup {
   position: fixed;
   z-index: 50;
