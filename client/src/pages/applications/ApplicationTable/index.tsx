@@ -6,7 +6,7 @@ import {
   type TableColumn,
   type TableViewState,
 } from "@components/molecules/table";
-import type { JobApplication, JobType, Salary } from "@app-types";
+import type { JobApplication, Salary } from "@app-types";
 import { formatLocation } from "@utils";
 import { Button } from "@components/atoms/button";
 import { CopyIcon, ExternalLinkIcon } from "@icons";
@@ -33,11 +33,11 @@ const STATUS_LABEL: Record<JobApplication["status"], string> = {
   withdrawn: "Withdrawn",
 };
 
-const JOB_TYPE_LABEL: Record<JobType, string> = {
-  remote: "Remote",
-  onsite: "On-site",
-  hybrid: "Hybrid",
-};
+// const JOB_TYPE_LABEL: Record<JobType, string> = {
+//   remote: "Remote",
+//   onsite: "On-site",
+//   hybrid: "Hybrid",
+// };
 
 function formatSalary(salary: Salary | null): string {
   if (!salary) return "—";
@@ -89,6 +89,7 @@ const COLUMNS: TableColumn<JobApplication>[] = [
   {
     id: "role",
     header: "Role",
+    sticky: true,
     filterable: false,
     sortable: false,
     render: (row) => <span className="text-vortex-secondary">{row.role}</span>,
