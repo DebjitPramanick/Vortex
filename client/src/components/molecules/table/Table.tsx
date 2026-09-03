@@ -16,6 +16,7 @@ import {
   type TableViewState,
 } from "./tableViewState.ts";
 import "./table.css";
+import useStickyOffsets from "./useStickyOffset.ts";
 
 export type { TableSortDirection, TableViewState } from "./tableViewState.ts";
 
@@ -128,7 +129,9 @@ export function Table<T>({
   onViewChange,
   ref,
 }: TableProps<T>) {
+  const { setThRef, columnOffsets } = useStickyOffsets(columns);
   const [internalView, setInternalView] = useState(DEFAULT_TABLE_VIEW);
+
   const view = viewProp ?? internalView;
   const { query, sort, filters, page } = view;
 
@@ -299,6 +302,8 @@ export function Table<T>({
                     key={column.id}
                     scope="col"
                     className={cx(column.sticky && "vx-table-th-sticky")}
+                    ref={setThRef(column.id)}
+                    data-col={column.id}
                   >
                     <div className="vx-table-th">
                       <span>{column.header}</span>
@@ -356,6 +361,9 @@ export function Table<T>({
                     <td
                       key={column.id}
                       className={cx(column.sticky && "vx-table-td-sticky")}
+                      style={{
+                        left: columnOffsets[column.id] ?? 0,
+                      }}
                     >
                       {column.render(row)}
                     </td>
