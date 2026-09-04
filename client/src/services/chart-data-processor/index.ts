@@ -69,7 +69,8 @@ export class ChartDataProcessor {
     );
     return Object.entries(applicationsByLocation).reduce(
       (acc: ApplicationCountByLocation[], [key, applications]) => {
-        if (applications.length > 5) {
+        console.log(key, applications.length);
+        if (applications.length >= 4) {
           acc.push({ location: key, count: applications.length });
         }
         return acc;
